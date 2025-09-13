@@ -2,13 +2,14 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 15:04:31
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-11 15:54:54
- * @FilePath: /rm_base/modules/BMI088/bmi088_cali.c
+ * @LastEditTime: 2025-09-13 12:51:55
+ * @FilePath: /rm_base/modules/IMU/BMI088/bmi088_cali.c
  * @Description: 
  */
 #include "bmi088.h"
 #include "bsp_dwt.h"
 #include "bsp_flash.h"
+#include "imu_data.h"
 #include "osal_def.h"
 #include "rgb.h"
 #include "math.h"
@@ -18,7 +19,7 @@
 
 #include "modules_config.h"
 
-#if BMI088_ENABLE
+#if IMU_TYPE  == IMU_BMI088
 
 #define GxOFFSET -0.00601393497f
 #define GyOFFSET -0.00196841615f
@@ -27,6 +28,7 @@
 
 static float gyroDiff[3], gNormDiff;
 static BMI088_Cali_Offset_t caliOffset;
+static IMU_Data_t IMU_Data;
 osal_status_t Calibrate_BMI088_Offset(BMI088_Instance_t *ist)
 {
     osal_status_t status = OSAL_SUCCESS;
@@ -65,24 +67,24 @@ osal_status_t Calibrate_BMI088_Offset(BMI088_Instance_t *ist)
         for (uint16_t i = 0; i < CaliTimes; i++)
         {
 
-            bmi088_get_accel(ist);
-            gNormTemp = sqrtf(ist->BMI088_Raw_Data.acc[0] * ist->BMI088_Raw_Data.acc[0] +
-                              ist->BMI088_Raw_Data.acc[1] * ist->BMI088_Raw_Data.acc[1] +
-                              ist->BMI088_Raw_Data.acc[2] * ist->BMI088_Raw_Data.acc[2]);
+            bmi088_get_accel(ist,&IMU_Data);
+            gNormTemp = sqrtf(IMU_Data.acc[0] * IMU_Data.acc[0] +
+                              IMU_Data.acc[1] * IMU_Data.acc[1] +
+                              IMU_Data.acc[2] * IMU_Data.acc[2]);
             caliOffset.gNorm += gNormTemp;
 
-            bmi088_get_gyro(ist);
-            caliOffset.GyroOffset[0] += ist->BMI088_Raw_Data.gyro[0];
-            caliOffset.GyroOffset[1] += ist->BMI088_Raw_Data.gyro[1];
-            caliOffset.GyroOffset[2] += ist->BMI088_Raw_Data.gyro[2];
+            bmi088_get_gyro(ist,&IMU_Data);
+            caliOffset.GyroOffset[0] += IMU_Data.gyro[0];
+            caliOffset.GyroOffset[1] += IMU_Data.gyro[1];
+            caliOffset.GyroOffset[2] += IMU_Data.gyro[2];
             if (i == 0)
             {
                 gNormMax = gNormTemp;
                 gNormMin = gNormTemp;
                 for (uint8_t j = 0; j < 3; j++)
                 {
-                    gyroMax[j] = ist->BMI088_Raw_Data.gyro[j];
-                    gyroMin[j] = ist->BMI088_Raw_Data.gyro[j];
+                    gyroMax[j] = IMU_Data.gyro[j];
+                    gyroMin[j] = IMU_Data.gyro[j];
                 }
             }
             else
@@ -93,8 +95,8 @@ osal_status_t Calibrate_BMI088_Offset(BMI088_Instance_t *ist)
                     gNormMin = gNormTemp;
                 for (uint8_t j = 0; j < 3; j++)
                 {
-                    if (ist->BMI088_Raw_Data.gyro[j] > gyroMax[j]) gyroMax[j] = ist->BMI088_Raw_Data.gyro[j];
-                    if (ist->BMI088_Raw_Data.gyro[j] < gyroMin[j]) gyroMin[j] = ist->BMI088_Raw_Data.gyro[j];
+                    if (IMU_Data.gyro[j] > gyroMax[j]) gyroMax[j] = IMU_Data.gyro[j];
+                    if (IMU_Data.gyro[j] < gyroMin[j]) gyroMin[j] = IMU_Data.gyro[j];
                 }
             }
             gNormDiff = gNormMax - gNormMin;
@@ -107,8 +109,8 @@ osal_status_t Calibrate_BMI088_Offset(BMI088_Instance_t *ist)
         for (uint8_t i = 0; i < 3; i++){caliOffset.GyroOffset[i] /= (float)CaliTimes;}
 
         //记录标定时的温度
-        bmi088_get_temp(ist);
-        caliOffset.TempWhenCali =ist->BMI088_Raw_Data.temperature;
+        bmi088_get_temp(ist,&IMU_Data);
+        caliOffset.TempWhenCali =IMU_Data.temperature;
         LOG_INFO("tempcali:%0.2f\n",caliOffset.TempWhenCali);
 
     } while (gNormDiff > 0.5f ||fabsf(caliOffset.gNorm - 9.8f) > 0.5f || gyroDiff[0] > 0.15f || gyroDiff[1] > 0.15f || gyroDiff[2] > 0.15f ||

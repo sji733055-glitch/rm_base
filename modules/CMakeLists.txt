@@ -5,8 +5,9 @@ set(name MODULES)
 add_library(${name} STATIC
     RGB/rgb.c
     IST8310/ist8310.c
-    BMI088/bmi088.c
-    BMI088/bmi088_cali.c
+    IMU/IMULAYER/imulayer.c
+    IMU/BMI088/bmi088.c
+    IMU/BMI088/bmi088_cali.c
     algorithm/compensation.c
     algorithm/controller.c
     algorithm/kalman_filter.c
@@ -22,10 +23,13 @@ target_include_directories(${name}
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/RGB
     ${CMAKE_CURRENT_SOURCE_DIR}/IST8310
-    ${CMAKE_CURRENT_SOURCE_DIR}/BMI088
+    ${CMAKE_CURRENT_SOURCE_DIR}/IMU
+    ${CMAKE_CURRENT_SOURCE_DIR}/IMU/IMULAYER
     ${CMAKE_CURRENT_SOURCE_DIR}/algorithm
     ${CMAKE_CURRENT_SOURCE_DIR}/BEEP
     ${CMAKE_CURRENT_SOURCE_DIR}/OFFLINE
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/IMU/BMI088
 )
 
 # 链接必要的库
