@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 13:43:14
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-13 12:51:49
+ * @LastEditTime: 2025-09-13 22:46:01
  * @FilePath: /rm_base/modules/IMU/BMI088/bmi088.h
  * @Description: 
  */
@@ -25,6 +25,7 @@ typedef struct{
     float GyroOffset[3];
     float gNorm;          // 重力加速度模长,从标定获取
     float TempWhenCali;   //标定时温度
+    uint8_t Calibrated;
 }BMI088_Cali_Offset_t;
 
 typedef struct

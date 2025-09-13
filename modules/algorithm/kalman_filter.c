@@ -129,6 +129,20 @@
 #include "kalman_filter.h"
 #include "arm_math.h"
 
+
+//内存分配
+extern TX_BYTE_POOL tx_app_byte_pool;
+// 内存分配函数
+void* threadx_malloc(size_t size) {
+    void *ptr = NULL;
+    if (tx_byte_allocate(&tx_app_byte_pool, &ptr, size, TX_WAIT_FOREVER) == TX_SUCCESS) {
+        tx_thread_sleep(100);
+        return ptr;
+    } else {
+        return NULL;
+    }
+}
+
 uint16_t sizeof_float, sizeof_double;
 
 static void H_K_R_Adjustment(KalmanFilter_t *kf);

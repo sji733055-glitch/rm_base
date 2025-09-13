@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 15:04:31
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-13 12:51:55
+ * @LastEditTime: 2025-09-13 22:47:03
  * @FilePath: /rm_base/modules/IMU/BMI088/bmi088_cali.c
  * @Description: 
  */
@@ -51,6 +51,7 @@ osal_status_t Calibrate_BMI088_Offset(BMI088_Instance_t *ist)
             caliOffset.GyroOffset[2] = GzOFFSET;
             caliOffset.gNorm = gNORM;
             caliOffset.TempWhenCali =40;
+            caliOffset.Calibrated = 1;
             LOG_ERROR("Calibrate BMI088 Offset Failed!");
             RGB_show(LED_Red);
             status = OSAL_ERROR;
@@ -63,6 +64,7 @@ osal_status_t Calibrate_BMI088_Offset(BMI088_Instance_t *ist)
         caliOffset.GyroOffset[0] = 0;
         caliOffset.GyroOffset[1] = 0;
         caliOffset.GyroOffset[2] = 0;
+        caliOffset.Calibrated = 0;
 
         for (uint16_t i = 0; i < CaliTimes; i++)
         {
@@ -112,6 +114,7 @@ osal_status_t Calibrate_BMI088_Offset(BMI088_Instance_t *ist)
         bmi088_get_temp(ist,&IMU_Data);
         caliOffset.TempWhenCali =IMU_Data.temperature;
         LOG_INFO("tempcali:%0.2f\n",caliOffset.TempWhenCali);
+        caliOffset.Calibrated = 1;
 
     } while (gNormDiff > 0.5f ||fabsf(caliOffset.gNorm - 9.8f) > 0.5f || gyroDiff[0] > 0.15f || gyroDiff[1] > 0.15f || gyroDiff[2] > 0.15f ||
              fabsf(caliOffset.GyroOffset[0]) > 0.01f || fabsf(caliOffset.GyroOffset[1]) > 0.01f || fabsf(caliOffset.GyroOffset[2]) > 0.01f);

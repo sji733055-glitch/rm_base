@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 13:43:09
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-13 13:09:44
+ * @LastEditTime: 2025-09-13 22:56:51
  * @FilePath: /rm_base/modules/IMU/BMI088/bmi088.c
  * @Description: 
  */
@@ -123,7 +123,7 @@ static inline void bmi088_gyro_init(BMI088_Instance_t *ist){
 
     // 检查ID,如果不是0x0F(bmi088 whoami寄存器值),则返回错误
     uint8_t whoami_check = 0;
-    _bmi088_readdata(ist->gyro_device, BMI088_GYRO_CHIP_ID, &whoami_check, 1,1);
+    _bmi088_readdata(ist->gyro_device, BMI088_GYRO_CHIP_ID, &whoami_check, 1,0);
     if (whoami_check != BMI088_GYRO_CHIP_ID_VALUE)
     {
         LOG_ERROR("No gyro Sensor!");
@@ -158,7 +158,12 @@ osal_status_t bmi088_get_accel(BMI088_Instance_t *ist,IMU_Data_t *IMU_Data)
     // 读取accel的x轴数据首地址,bmi088内部自增读取地址 // 3* sizeof(int16_t)
     status = _bmi088_readdata(ist->acc_device, BMI088_ACCEL_XOUT_L, ist->buf, 6,1);
     for (uint8_t i = 0; i < 3; i++){
-        IMU_Data->acc[i] = (BMI088_ACCEL_6G_SEN) * (float)((int16_t)((ist->buf[2 * i + 1]) << 8) | ist->buf[2 * i]);
+        if(ist->BMI088_Cali_Offset.Calibrated){
+            IMU_Data->acc[i] = (BMI088_ACCEL_6G_SEN) * (float)((int16_t)((ist->buf[2 * i + 1]) << 8) | ist->buf[2 * i]) * ist->BMI088_Cali_Offset.AccelScale;
+        }else
+        {
+            IMU_Data->acc[i] = (BMI088_ACCEL_6G_SEN) * (float)((int16_t)((ist->buf[2 * i + 1]) << 8) | ist->buf[2 * i]);
+        }
     }
     return status;
 }
@@ -185,8 +190,15 @@ osal_status_t bmi088_get_gyro(BMI088_Instance_t *ist,IMU_Data_t *IMU_Data)
     }
     osal_status_t status = OSAL_SUCCESS;
     status = _bmi088_readdata(ist->gyro_device, BMI088_GYRO_X_L, ist->buf, 6,0); // 连续读取3个(3*2=6)轴的角速度
-    for (uint8_t i = 0; i < 3; i++){
-        IMU_Data->gyro[i] = BMI088_GYRO_2000_SEN * (float)((int16_t)((ist->buf[2 * i + 1]) << 8) | ist->buf[2 * i]);
+    if (ist->BMI088_Cali_Offset.Calibrated)
+    {
+        for (uint8_t i = 0; i < 3; i++){
+            IMU_Data->gyro[i] = BMI088_GYRO_2000_SEN * (float)((int16_t)((ist->buf[2 * i + 1]) << 8) | ist->buf[2 * i]) * ist->BMI088_Cali_Offset.GyroOffset[i];
+        }
+    }else{
+        for (uint8_t i = 0; i < 3; i++){
+            IMU_Data->gyro[i] = BMI088_GYRO_2000_SEN * (float)((int16_t)((ist->buf[2 * i + 1]) << 8) | ist->buf[2 * i]);
+        }
     }
     return status;
 }
@@ -257,7 +269,7 @@ osal_status_t BMI088_init(BMI088_Instance_t *ist){
         BSP_PWM_Start(ist->bmi088_pwm);
         #endif
         static uint8_t tmpdata[sizeof(BMI088_Cali_Offset_t)+2] = {0};
-        BSP_FLASH_Read_Buffer(0x080E0000, tmpdata, sizeof(BMI088_Cali_Offset_t)+2);
+        BSP_FLASH_Read_Buffer(0x080E0000, tmpdata, sizeof(tmpdata));
         if (tmpdata[sizeof(BMI088_Cali_Offset_t)+1] != 0xAA)
         {
             Calibrate_BMI088_Offset(ist);
