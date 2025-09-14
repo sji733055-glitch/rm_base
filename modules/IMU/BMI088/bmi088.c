@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 13:43:09
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-13 22:56:51
+ * @LastEditTime: 2025-09-14 09:14:54
  * @FilePath: /rm_base/modules/IMU/BMI088/bmi088.c
  * @Description: 
  */
@@ -193,7 +193,7 @@ osal_status_t bmi088_get_gyro(BMI088_Instance_t *ist,IMU_Data_t *IMU_Data)
     if (ist->BMI088_Cali_Offset.Calibrated)
     {
         for (uint8_t i = 0; i < 3; i++){
-            IMU_Data->gyro[i] = BMI088_GYRO_2000_SEN * (float)((int16_t)((ist->buf[2 * i + 1]) << 8) | ist->buf[2 * i]) * ist->BMI088_Cali_Offset.GyroOffset[i];
+            IMU_Data->gyro[i] = BMI088_GYRO_2000_SEN * (float)((int16_t)((ist->buf[2 * i + 1]) << 8) | ist->buf[2 * i]) - ist->BMI088_Cali_Offset.GyroOffset[i];
         }
     }else{
         for (uint8_t i = 0; i < 3; i++){
