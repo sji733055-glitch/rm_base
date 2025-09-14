@@ -302,7 +302,7 @@ static void IMU_QuaternionEKF_SetH(KalmanFilter_t *kf)
     doubleq2 = 2 * kf->xhatminus_data[2];
     doubleq3 = 2 * kf->xhatminus_data[3];
 
-    memset(kf->H_data, 0, sizeof_float * kf->zSize * kf->xhatSize);
+    memset(kf->H_data, 0, sizeof(float) * kf->zSize * kf->xhatSize);
 
     kf->H_data[0] = -doubleq2;
     kf->H_data[1] = doubleq3;
@@ -402,8 +402,8 @@ static void IMU_QuaternionEKF_xhatUpdate(KalmanFilter_t *kf)
             //  残差未通过卡方检验 仅预测
             //  xhat(k) = xhat'(k)
             //  P(k) = P'(k)
-            memcpy(kf->xhat_data, kf->xhatminus_data, sizeof_float * kf->xhatSize);
-            memcpy(kf->P_data, kf->Pminus_data, sizeof_float * kf->xhatSize * kf->xhatSize);
+            memcpy(kf->xhat_data, kf->xhatminus_data, sizeof(float) * kf->xhatSize);
+            memcpy(kf->P_data, kf->Pminus_data, sizeof(float) * kf->xhatSize * kf->xhatSize);
             kf->SkipEq5 = TRUE; // part5 is P updating
             return;
         }
