@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-14 12:51:31
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-14 12:52:49
+ * @LastEditTime: 2025-09-14 13:49:46
  * @FilePath: /rm_base/CONFIG/app_config.h
  * @Description: 
  */
@@ -14,5 +14,9 @@
 #define OFFLINE_THREAD_STACK_SIZE      1024                                  // 离线检测线程栈大小 
 #define OFFLINE_THREAD_STACK_SECTION   __attribute__((section(".ccmram")))   // 线程栈内存区域 
 #define OFFLINE_THREAD_PRIORITY        1                                     // 离线检测线程优先级 
+/* ins 线程配置 */
+#define INS_THREAD_STACK_SIZE          1024                                   // INS线程栈大小
+#define INS_THREAD_STACK_SECTION       __attribute__((section(".ccmram")))    // 线程栈内存区域
+#define INS_THREAD_PRIORITY            2                                      // INS线程优先级
 
 #endif // _APP_CONFIG_H_

@@ -12,10 +12,11 @@ add_library(${name} STATIC
     algorithm/controller.c
     algorithm/kalman_filter.c
     algorithm/LQR.c
-    algorithm/QuaternionEKF.c
     algorithm/user_lib.c
     BEEP/beep.c
     OFFLINE/offline.c
+    INS/ins.c
+    INS/QuaternionEKF.c
 )
 
 # 设置包含目录
@@ -29,6 +30,7 @@ target_include_directories(${name}
     ${CMAKE_CURRENT_SOURCE_DIR}/algorithm
     ${CMAKE_CURRENT_SOURCE_DIR}/BEEP
     ${CMAKE_CURRENT_SOURCE_DIR}/OFFLINE
+    ${CMAKE_CURRENT_SOURCE_DIR}/INS
     
 )
 

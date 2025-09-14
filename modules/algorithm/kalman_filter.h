@@ -29,9 +29,9 @@
 #include "tx_api.h"
 
 // 最大支持的状态变量、控制变量和观测变量维度
-#define KF_MAX_XHAT_SIZE 20
-#define KF_MAX_U_SIZE 10
-#define KF_MAX_Z_SIZE 10
+#define KF_MAX_XHAT_SIZE 10
+#define KF_MAX_U_SIZE 1
+#define KF_MAX_Z_SIZE 5
 // 矩阵定义
 #define mat arm_matrix_instance_f32
 #define Matrix_Init arm_mat_init_f32

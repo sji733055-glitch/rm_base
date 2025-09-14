@@ -146,8 +146,8 @@ float ramp_v0_calculate(ramp_v0_t *ramp);
 
 void MatInit(mat *m, uint8_t row, uint8_t col);
 float AverageFilter(float new_data, float *buf, uint8_t len);
-float Dot3d(float *v1, float *v2);
-void Cross3d(float *v1, float *v2, float *res);
+float Dot3d(const float *v1, const float *v2);
+void Cross3d(const float *v1, const float *v2, float *res);
 float NormOf3d(float *v);
 float *Norm3d(float *v);
 
