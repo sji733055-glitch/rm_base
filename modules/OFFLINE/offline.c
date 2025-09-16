@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 19:45:50
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-14 13:07:25
+ * @LastEditTime: 2025-09-16 09:37:58
  * @FilePath: /rm_base/modules/OFFLINE/offline.c
  * @Description: 
  */
@@ -35,6 +35,7 @@ void offline_task_function()
     highest_error_level = 0;
     alarm_device_index = OFFLINE_INVALID_INDEX;
     bool any_device_offline = false;
+    bool all_same_level_are_beep_zero = true;  // 假设所有相同优先级设备beep_times都为0
     
     // 检查所有设备状态
     for (uint8_t i = 0; i < offline_manager.device_count; i++) {
@@ -51,9 +52,15 @@ void offline_task_function()
                 highest_error_level = device->level;
                 alarm_device_index = i;
                 current_beep_times = device->beep_times;
+                all_same_level_are_beep_zero = (device->beep_times == 0);  // 更新初始状态
             }
             // 相同优先级时的处理
             else if (device->level == highest_error_level) {
+                // 检查是否所有相同优先级的设备beep_times都为0
+                if (device->beep_times != 0) {
+                    all_same_level_are_beep_zero = false;
+                }
+                
                 // 如果当前设备不需要蜂鸣（beep_times=0），保持原来的设备
                 if (device->beep_times == 0) {continue;}
                 // 如果之前选中的设备不需要蜂鸣，或者当前设备蜂鸣次数更少
@@ -68,8 +75,11 @@ void offline_task_function()
     }
     
     // 触发报警或清除报警
-    if (alarm_device_index != OFFLINE_INVALID_INDEX && any_device_offline) {
-        // 已在上面设置了current_beep_times
+    if (alarm_device_index != OFFLINE_INVALID_INDEX && any_device_offline && !all_same_level_are_beep_zero) {
+        // 有需要蜂鸣的设备离线
+    } else if (any_device_offline && all_same_level_are_beep_zero) {
+        // 相同优先级且beep_times都为0的设备离线，常亮红灯
+        RGB_show(LED_Red);
     } else {
         // 所有设备都在线，清除报警
         current_beep_times = 0;
