@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-13 10:14:45
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-14 14:23:43
+ * @LastEditTime: 2025-09-16 00:00:05
  * @FilePath: /rm_base/applications/robot_init/robot_init.c
  * @Description: 
  */
@@ -12,6 +12,8 @@
 #include "log.h"
 #include "offline.h"
 #include "offline_task.h"
+#include "remote.h"
+#include "remote_task.h"
 #include "shell.h"
 #include "rgb.h"
 #include "ins_task.h"
@@ -28,11 +30,13 @@ void bsp_init()
 void modules_init(){
   offline_init();
   ins_init();
+  remote_init();
 }
 
 void app_init(){
   offline_task_init();
   ins_task_init();
+  remote_task_init();
 }
 
 

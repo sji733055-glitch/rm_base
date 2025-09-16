@@ -13,10 +13,16 @@ add_library(${name} STATIC
     algorithm/kalman_filter.c
     algorithm/LQR.c
     algorithm/user_lib.c
+    algorithm/crc_rm.c
     BEEP/beep.c
     OFFLINE/offline.c
     INS/ins.c
     INS/QuaternionEKF.c
+    REMOTE/remote.c
+    REMOTE/SBUS/sbus.c
+    REMOTE/DT7/dt7.c
+    REMOTE/VT02/vt02.c
+    REMOTE/VT03/vt03.c
 )
 
 # 设置包含目录
@@ -31,7 +37,11 @@ target_include_directories(${name}
     ${CMAKE_CURRENT_SOURCE_DIR}/BEEP
     ${CMAKE_CURRENT_SOURCE_DIR}/OFFLINE
     ${CMAKE_CURRENT_SOURCE_DIR}/INS
-    
+    ${CMAKE_CURRENT_SOURCE_DIR}/REMOTE
+    ${CMAKE_CURRENT_SOURCE_DIR}/REMOTE/DT7
+    ${CMAKE_CURRENT_SOURCE_DIR}/REMOTE/SBUS
+    ${CMAKE_CURRENT_SOURCE_DIR}/REMOTE/VT02
+    ${CMAKE_CURRENT_SOURCE_DIR}/REMOTE/VT03
 )
 
 # 链接必要的库
