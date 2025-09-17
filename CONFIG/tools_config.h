@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-10 09:54:06
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 16:19:23
+ * @LastEditTime: 2025-09-17 20:31:12
  * @FilePath: /rm_base/CONFIG/tools_config.h
  * @Description: 
  */
@@ -20,9 +20,6 @@
 #define SHELL_RTT                    1                                    // 使用rtt作为shell通讯方式,当使能时,SHELL_COM无效
 #define SHELL_COM                    huart6                               // shell使用的通讯接口(uart)
 #define SHELL_BUFFER_SIZE            32                                   // shell缓冲区大小
-#define SHELL_THREAD_STACK_SIZE      1024                                 // shell线程栈大小
-#define SHELL_THREAD_PRIORITY        30                                   // shell线程优先级
-#define SHELL_THREAD_STACK_SECTION  __attribute__((section(".ccmram")))   // shell线程栈内存区域
 
 /* log 配置 */
 // 默认输出方式

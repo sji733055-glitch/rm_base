@@ -2,14 +2,14 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-04 12:51:36
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 16:16:03
+ * @LastEditTime: 2025-09-17 20:14:10
  * @FilePath: /rm_base/tools/SHELL/shell.h
  * @Description: 
  */
 #ifndef _SHELL_H_
 #define _SHELL_H_
 
-#include "tx_api.h"
+#include "osal_def.h"
 #include "bsp_uart.h"
 #include <stdbool.h>
 #include "tools_config.h"
@@ -35,17 +35,22 @@ typedef struct {
     char history[SHELL_HISTORY_MAX][SHELL_CMD_MAX_LENGTH]; // 历史命令
     uint8_t history_count;              // 历史命令数量
     uint8_t history_index;              // 当前历史命令索引
-    TX_THREAD thread;                   // shell线程
-    TX_MUTEX mutex;                     // 互斥锁
+    osal_mutex_t mutex;                     // 互斥锁
     bool running;                       // 运行状态
     bool initialized;                   // 初始化状态
 } shell_context_t;
 
+/**
+ * @description: shell初始化
+ * @return {*}
+ */
 void shell_init();
 void shell_printf(const char *fmt, ...);
 void shell_send(const uint8_t *data, uint16_t len);
 // 函数注册接口
 int shell_register_function(const char* name, shell_cmd_func_t func, const char* description);
+
+void shell_task_function();
 
 
 void shell_help_cmd(int argc, char **argv);

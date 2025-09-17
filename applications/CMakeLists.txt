@@ -3,6 +3,7 @@ set(name APPLICATIONS)
 
 
 add_library(${name} STATIC
+    shell_task/shell_task.c
     robot_init/robot_init.c
     offline_task/offline_task.c
     ins_task/ins_task.c
@@ -18,6 +19,7 @@ target_include_directories(${name}
     ${CMAKE_CURRENT_SOURCE_DIR}/ins_task
     ${CMAKE_CURRENT_SOURCE_DIR}/remote_task
     ${CMAKE_CURRENT_SOURCE_DIR}/dm_imu_task
+    ${CMAKE_CURRENT_SOURCE_DIR}/shell_task
 )
 
 # 链接必要的库

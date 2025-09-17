@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-14 12:51:31
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-16 18:00:31
+ * @LastEditTime: 2025-09-17 20:31:20
  * @FilePath: /rm_base/CONFIG/app_config.h
  * @Description: 
  */
@@ -10,6 +10,10 @@
 #define _APP_CONFIG_H_
 
 /* 线程配置文件 */
+/* shell 线程配置 */
+#define SHELL_THREAD_STACK_SIZE        1024                                  // shell线程栈大小
+#define SHELL_THREAD_PRIORITY          30                                    // shell线程优先级
+#define SHELL_THREAD_STACK_SECTION     __attribute__((section(".ccmram")))   // shell线程栈内存区域
 /* offline 线程配置 */
 #define OFFLINE_THREAD_STACK_SIZE      1024                                  // 离线检测线程栈大小 
 #define OFFLINE_THREAD_STACK_SECTION   __attribute__((section(".ccmram")))   // 线程栈内存区域 

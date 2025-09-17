@@ -20,7 +20,6 @@
 // 全局shell上下文
 static shell_context_t g_shell_ctx;
 static uint8_t shell_rx_buffer[SHELL_BUFFER_SIZE][2]; // 双缓冲区，每个缓冲区2字节
-SHELL_THREAD_STACK_SECTION static uint8_t shell_thread_stack[SHELL_THREAD_STACK_SIZE];
 
 // 内置命令表
 static const shell_cmd_t g_shell_cmds[] = {
@@ -36,7 +35,6 @@ static shell_cmd_t g_dynamic_shell_cmds[SHELL_MAX_DYNAMIC_COMMANDS];
 static int g_dynamic_cmd_count = 0;
 
 // 内部函数声明
-static void shell_thread_entry(ULONG input);
 static void shell_parse_cmd(void);
 static void shell_execute_cmd(void);
 static void shell_print_prompt(void);
@@ -206,12 +204,6 @@ void shell_init() {
     
     // 创建互斥锁
     osal_mutex_create(&g_shell_ctx.mutex, "Shell Mutex");
-    
-    // 创建shell线程
-    osal_thread_create(&g_shell_ctx.thread, "Shell Thread",shell_thread_entry,
-                      0,shell_thread_stack,
-                      SHELL_THREAD_STACK_SIZE,SHELL_THREAD_PRIORITY); 
-    osal_thread_start(&g_shell_ctx.thread);
     g_shell_ctx.running = true;
     shell_printf("\r\n");
     shell_printf("  __  __    _    ____\r\n");
@@ -233,13 +225,12 @@ void shell_rtt_process_no_lock(void) {
     }
 }
 
-// shell线程入口函数
-static void shell_thread_entry(ULONG input) {
-    while (g_shell_ctx.running && g_shell_ctx.initialized) {
+// shell线程任务函数
+void shell_task_function() {
+    if (g_shell_ctx.running && g_shell_ctx.initialized) {
         if (SHELL_RTT)
         {
             shell_rtt_process_no_lock();
-            osal_delay_ms(100);
         }
         else
         {

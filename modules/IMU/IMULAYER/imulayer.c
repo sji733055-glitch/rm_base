@@ -2,7 +2,7 @@
  * @Author: your name
  * @Date: 2025-09-13 10:54:50
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-13 13:07:51
+ * @LastEditTime: 2025-09-17 20:42:51
  * @FilePath: /rm_base/modules/IMU/IMULAYER/imulayer.c
  * @Description: IMU兼容层实现
  */
@@ -25,7 +25,7 @@ osal_status_t imu_init(IMU_Instance_t *ist)
 
     osal_status_t status = OSAL_SUCCESS;
     
-#if IMU_TYPE == IMU_BMI088
+#if IMU_TYPE == 1
     status = BMI088_init(&ist->imu_handle);
     if (status == OSAL_SUCCESS) {
         ist->init_flag = 1;  // 设置初始化标志
@@ -44,7 +44,7 @@ osal_status_t imu_get_accel(IMU_Instance_t *ist)
 
     osal_status_t status = OSAL_SUCCESS;
 
-#if IMU_TYPE == IMU_BMI088
+#if IMU_TYPE == 1
     status = bmi088_get_accel(&ist->imu_handle, &ist->data);
 #endif
 
@@ -60,7 +60,7 @@ osal_status_t imu_get_gyro(IMU_Instance_t *ist)
 
     osal_status_t status = OSAL_SUCCESS;
 
-#if IMU_TYPE == IMU_BMI088
+#if IMU_TYPE == 1
     status = bmi088_get_gyro(&ist->imu_handle, &ist->data);
 #endif
 
@@ -76,7 +76,7 @@ osal_status_t imu_get_temp(IMU_Instance_t *ist)
 
     osal_status_t status = OSAL_SUCCESS;
 
-#if IMU_TYPE == IMU_BMI088
+#if IMU_TYPE == 1
     status = bmi088_get_temp(&ist->imu_handle, &ist->data);
 #endif
 
@@ -89,7 +89,7 @@ void imu_temp_ctrl(IMU_Instance_t *ist,float temp)
     if (ist == NULL || ist->init_flag == 0) {
         return ;
     }
-#if IMU_TYPE == IMU_BMI088
+#if IMU_TYPE == 1
     bmi088_temp_ctrl(&ist->imu_handle ,temp);
 #endif
 }
