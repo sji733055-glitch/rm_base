@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-16 10:10:42
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-16 11:29:55
+ * @LastEditTime: 2025-09-17 13:01:55
  * @FilePath: /rm_base/modules/DM_IMU/dm_imu.c
  * @Description: 
  */
@@ -12,7 +12,10 @@
 #include "offline.h"
 #include "osal_def.h"
 #include "user_lib.h"
+#include <string.h>
 
+
+#if DM_IMU_ENABLE
 
 #define log_tag  "dm_imu"
 #include "log.h"
@@ -194,3 +197,14 @@ DM_IMU_Instance_t* get_dm_imu_instance(void)
 {
     return &dm_imu_instance;
 }
+
+#else  
+osal_status_t dm_imu_init(void){
+    return OSAL_SUCCESS;
+}
+void dm_imu_task_function(void){}
+
+DM_IMU_Instance_t* get_dm_imu_instance(void){
+    return NULL;
+}
+#endif

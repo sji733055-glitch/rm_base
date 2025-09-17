@@ -2,11 +2,14 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-14 08:49:07
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-14 14:27:00
+ * @LastEditTime: 2025-09-17 12:52:19
  * @FilePath: /rm_base/modules/INS/ins.c
  * @Description: INS姿态解算实现
  */
 #include "ins.h"
+#include "modules_config.h"
+
+#if INS_ENABLE
 #include "QuaternionEKF.h"
 #include "arm_math.h"
 #include "bsp_dwt.h"
@@ -18,6 +21,11 @@
 
 #define log_tag  "ins"
 #include "log.h"
+
+// 常量定义
+#define INS_ACCEL_LPF_COEF 0.0085f  // 加速度低通滤波系数
+#define INIT_SAMPLE_COUNT 100       // 初始化采样次数
+#define GRAVITY_CONSTANT 9.81f      // 重力加速度常数
 
 // 静态变量定义
 static INS_t INS = {0};
@@ -277,3 +285,8 @@ static void IMU_Param_Correction(INS_Param_t *param, float gyro[3], float accel[
     accel[1] = c_21 * accel_temp[0] + c_22 * accel_temp[1] + c_23 * accel_temp[2];
     accel[2] = c_31 * accel_temp[0] + c_32 * accel_temp[1] + c_33 * accel_temp[2];
 }
+
+#else  
+void ins_task_function(){}
+void ins_init(){};
+#endif 

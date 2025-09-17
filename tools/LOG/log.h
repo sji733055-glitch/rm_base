@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 08:34:46
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-11 08:59:08
+ * @LastEditTime: 2025-09-16 22:22:29
  * @FilePath: /rm_base/tools/LOG/log.h
  * @Description: 日志系统，支持tag、彩色输出、时间戳和多线程保护
  */
@@ -49,7 +49,7 @@
 #define log_tag "DEFAULT"
 #endif
 
-#if LOG_ENABLED
+#if LOG_ENABLE
 #define LOG_INIT() log_init()
 // 日志宏定义
 #define LOG_VERBOSE(fmt, ...) do { \

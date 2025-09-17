@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-14 08:49:46
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-14 13:36:57
+ * @LastEditTime: 2025-09-17 12:49:41
  * @FilePath: /rm_base/modules/INS/ins.h
  * @Description: INS姿态解算模块
  */
@@ -13,11 +13,6 @@
 #include "imu_data.h"
 #include "imulayer.h"
 #include <stdint.h>
-
-// 常量定义
-#define INS_ACCEL_LPF_COEF 0.0085f  // 加速度低通滤波系数
-#define INIT_SAMPLE_COUNT 100       // 初始化采样次数
-#define GRAVITY_CONSTANT 9.81f      // 重力加速度常数
 
 // INS核心结构体
 typedef struct
@@ -60,4 +55,4 @@ typedef struct
 void ins_init(void);
 void ins_task_function();
 
-#endif // _INS_H_
+#endif // _INS_H_  

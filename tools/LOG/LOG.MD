@@ -57,7 +57,7 @@ LOG 是一个功能丰富的日志系统，支持多级别日志输出、彩色�
   ## 配置选项
   
   ```c
-  #define LOG_ENABLED              1              // 启用日志功能
+  #define LOG_ENABLE              1              // 启用日志功能
   #define LOG_OUTPUT_LEVEL         LOG_LEVEL_VERBOSE  // 日志的输出等级
   #define LOG_COLOR_ENABLE         1              // 启用彩色输出
   #define LOG_TIMSTAMP_ENABLE      1              // 启用时间戳 

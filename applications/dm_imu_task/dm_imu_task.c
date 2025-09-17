@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-16 12:17:58
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-16 18:12:23
+ * @LastEditTime: 2025-09-17 13:08:40
  * @FilePath: /rm_base/applications/dm_imu_task/dm_imu_task.c
  * @Description: 
  */
@@ -11,6 +11,9 @@
 #include "app_config.h"
 #include "dm_imu.h"
 #include "osal_def.h"
+#include "modules_config.h"
+
+#if DM_IMU_ENABLE
 
 #define log_tag  "dm_imu_task"
 #include "log.h"
@@ -42,4 +45,7 @@ void dm_imu_task_init(void)
     osal_thread_start(&dm_imu_thread);
     LOG_INFO("dm_imu task start successfully");
 }
-
+#else 
+void dm_imu_task_init(void)
+{} 
+#endif

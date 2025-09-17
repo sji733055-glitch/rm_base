@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-08-06 10:31:16
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-11 22:15:31
+ * @LastEditTime: 2025-09-17 13:02:00
  * @FilePath: /rm_base/modules/BEEP/beep.c
  * @Description: 蜂鸣器模块，基于BSP_PWM组件实现
  */
@@ -79,7 +79,7 @@ osal_status_t beep_set_tune(uint16_t tune, uint16_t ctrl)
 }
 #else  
 osal_status_t beep_init(uint32_t frequency, uint32_t beep_time_period, osal_timer_callback_t callback){
-    return OSAL_ERROR;
+    return OSAL_SUCCESS;
 }
 osal_status_t beep_set_tune(uint16_t tune, uint16_t ctrl){
     return OSAL_SUCCESS;

@@ -2,13 +2,17 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 10:26:48
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-11 10:46:56
+ * @LastEditTime: 2025-09-17 13:02:57
  * @FilePath: /rm_base/modules/RGB/rgb.c
  * @Description: 
  */
 #include "rgb.h"
 #include "bsp_pwm.h"
 #include <string.h>
+
+#include "modules_config.h"
+
+#if RGB_ENABLE
 
 #define log_tag "RGB"
 #include "log.h"
@@ -76,3 +80,7 @@ void RGB_show(uint32_t aRGB)
     BSP_PWM_Set_Duty_Cycle(pwm_g,green_duty);
     BSP_PWM_Set_Duty_Cycle(pwm_b,blue_duty);
 }
+#else  
+void RGB_init(void){}
+void RGB_show(uint32_t aRGB){(void)aRGB;}
+#endif

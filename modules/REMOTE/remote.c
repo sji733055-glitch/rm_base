@@ -2,15 +2,18 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-15 09:18:31
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-16 08:23:22
+ * @LastEditTime: 2025-09-17 13:00:40
  * @FilePath: /rm_base/modules/REMOTE/remote.c
  * @Description: 
  */
 #include "remote.h"
 #include "modules_config.h"
 #include "offline.h"
+#include "osal_def.h"
 #include <stdint.h>
 #include <string.h>
+
+#if REMOTE_ENABLE
 
 #define log_tag "remote"
 #include "log.h"
@@ -198,4 +201,20 @@ remote_instance_t* get_remote_instance(void)
 {
     return &remote_instance;
 }
+#else  
+osal_status_t remote_init(void){return OSAL_SUCCESS;}
+uint8_t get_remote_channel_state(remote_instance_t *remote_instance, uint8_t channel_index, uint8_t is_vt_remote){
+    return channel_none;
+}
+mouse_state_t* get_remote_mouse(remote_instance_t *remote_instance, uint8_t is_vt_remote){
+    return NULL;
+}
+keyboard_state_t * get_remote_keyboard_state(remote_instance_t *remote_instance,uint8_t is_vt_remote){
+    return NULL;
+}
+void remote_task_function(void){}
+void remote_vt_task_function(void){}
+
+remote_instance_t* get_remote_instance(void){return NULL;}
+#endif
 

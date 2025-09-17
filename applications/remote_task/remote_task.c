@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-15 23:49:44
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-16 08:25:33
+ * @LastEditTime: 2025-09-17 13:10:56
  * @FilePath: /rm_base/applications/remote_task/remote_task.c
  * @Description: 
  */
@@ -10,6 +10,10 @@
 #include "app_config.h"
 #include "osal_def.h"
 #include "remote.h"
+
+#include "modules_config.h"
+
+#if REMOTE_ENABLE
 
 #define log_tag  "remote_task"
 #include "log.h"
@@ -70,4 +74,7 @@ void remote_task_init()
 
     LOG_INFO("remote/vt task started successfully.");
 }
+#else 
+void remote_task_init(){} 
+#endif
 

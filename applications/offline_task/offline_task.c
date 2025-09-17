@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-14 12:50:59
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-14 13:09:39
+ * @LastEditTime: 2025-09-17 13:10:24
  * @FilePath: /rm_base/applications/offline_task/offline_task.c
  * @Description: 
  */
@@ -12,6 +12,8 @@
 #include "modules_config.h"
 #include "osal_def.h"
 #include "offline_task.h"
+
+#if OFFLINE_ENABLE
 
 #if OFFLINE_WATCHDOG_ENABLE
 #include "iwdg.h"
@@ -52,3 +54,7 @@ void offline_task_init(){
 
     LOG_INFO("Offline task started successfully.");
 }
+
+#else 
+void offline_task_init(){} 
+#endif
