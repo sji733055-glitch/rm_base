@@ -2,15 +2,16 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-10 09:54:06
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-16 23:22:58
+ * @LastEditTime: 2025-09-17 16:19:23
  * @FilePath: /rm_base/CONFIG/tools_config.h
  * @Description: 
  */
 #ifndef _TOOLS_CONFIG_H_
 #define _TOOLS_CONFIG_H_
 
+#include "robot_config.h"
+
 /* shell 配置 */
-#define SHELL_ENABLE                 1                                    // 启用shell功能
 #define SHELL_CMD_MAX_LENGTH         128                                  // 最大命令长度
 #define SHELL_MAX_ARGS               8                                    // 最大参数数量
 #define SHELL_HISTORY_MAX            10                                   // 历史命令数量
@@ -25,7 +26,6 @@
 
 /* log 配置 */
 // 默认输出方式
-#define LOG_ENABLE                   1                                    // 启用日志功能
 #define LOG_OUTPUT_LEVEL             LOG_LEVEL_INFO                       // 日志的输出等级
 #define LOG_COLOR_ENABLE             1                                    // 启用彩色输出
 #define LOG_TIMSTAMP_ENABLE          1                                    // 启用时间戳 

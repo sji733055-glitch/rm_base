@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 13:43:09
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-14 09:14:54
+ * @LastEditTime: 2025-09-17 16:22:24
  * @FilePath: /rm_base/modules/IMU/BMI088/bmi088.c
  * @Description: 
  */
@@ -20,7 +20,7 @@
 #define log_tag "BMI088"
 #include "log.h"
 
-#if IMU_TYPE  == IMU_BMI088
+#if IMU_TYPE  == 1
 
 // 常量定义
 #define BMI088REG 0
@@ -287,17 +287,18 @@ osal_status_t BMI088_init(BMI088_Instance_t *ist){
     return OSAL_ERROR;
 }
 #else  
-BMI088_Instance_t* BMI088_init(void)
+osal_status_t BMI088_init(BMI088_Instance_t *ist)
 { 
-    return NULL;
-}
-osal_status_t bmi088_get_accel(IMU_Data_t *IMU_Data){
     return OSAL_SUCCESS;
 }
-osal_status_t bmi088_get_gyro(IMU_Data_t *IMU_Data){
+osal_status_t bmi088_get_accel(BMI088_Instance_t *ist,IMU_Data_t *IMU_Data){
+    return OSAL_SUCCESS;
+}
+osal_status_t bmi088_get_gyro(BMI088_Instance_t *ist,IMU_Data_t *IMU_Data){
     return OSAL_SUCCESS; 
 }
-osal_status_t bmi088_get_temp(IMU_Data_t *IMU_Data){
+osal_status_t bmi088_get_temp(BMI088_Instance_t *ist,IMU_Data_t *IMU_Data){
     return OSAL_SUCCESS;
 }
+void bmi088_temp_ctrl(BMI088_Instance_t *ist,float temp){}
 #endif

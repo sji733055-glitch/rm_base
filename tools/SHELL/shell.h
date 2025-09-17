@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-04 12:51:36
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-10 18:22:06
+ * @LastEditTime: 2025-09-17 16:16:03
  * @FilePath: /rm_base/tools/SHELL/shell.h
  * @Description: 
  */
@@ -40,19 +40,6 @@ typedef struct {
     bool running;                       // 运行状态
     bool initialized;                   // 初始化状态
 } shell_context_t;
-
-#if SHELL_ENABLE
-#define SHELL_INIT() shell_init()
-#define SHELL_PRINTF(...) shell_printf(__VA_ARGS__)
-#define SHELL_UART_SEND(data, len) shell_uart_send(data, len)
-#define SHELL_REGISTER_FUNCTION(name, func, description) shell_register_function(name, func, description)
-#else
-#define SHELL_INIT() do {} while(0);
-#define SHELL_PRINTF(...) do {} while(0);
-#define SHELL_UART_SEND(data, len) do {} while(0);
-#define SHELL_REGISTER_FUNCTION(name, func, description) -1
-#endif
-
 
 void shell_init();
 void shell_printf(const char *fmt, ...);

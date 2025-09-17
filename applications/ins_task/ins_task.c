@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-14 13:43:30
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 13:09:48
+ * @LastEditTime: 2025-09-17 16:05:42
  * @FilePath: /rm_base/applications/ins_task/ins_task.c
  * @Description: 
  */
@@ -11,7 +11,7 @@
 #include "osal_def.h"
 #include "modules_config.h"
 
-#if INS_ENABLE
+#ifdef INS_MODULE
 
 #define log_tag  "ins_task"
 #include "log.h"

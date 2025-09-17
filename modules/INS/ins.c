@@ -2,14 +2,14 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-14 08:49:07
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 12:52:19
+ * @LastEditTime: 2025-09-17 16:05:28
  * @FilePath: /rm_base/modules/INS/ins.c
  * @Description: INS姿态解算实现
  */
 #include "ins.h"
 #include "modules_config.h"
 
-#if INS_ENABLE
+#ifdef INS_MODULE
 #include "QuaternionEKF.h"
 #include "arm_math.h"
 #include "bsp_dwt.h"

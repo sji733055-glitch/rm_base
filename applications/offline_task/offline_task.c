@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-14 12:50:59
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 13:10:24
+ * @LastEditTime: 2025-09-17 16:08:42
  * @FilePath: /rm_base/applications/offline_task/offline_task.c
  * @Description: 
  */
@@ -13,7 +13,7 @@
 #include "osal_def.h"
 #include "offline_task.h"
 
-#if OFFLINE_ENABLE
+#ifdef OFFLINE_MODULE
 
 #if OFFLINE_WATCHDOG_ENABLE
 #include "iwdg.h"

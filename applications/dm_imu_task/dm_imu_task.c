@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-16 12:17:58
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 13:08:40
+ * @LastEditTime: 2025-09-17 16:12:07
  * @FilePath: /rm_base/applications/dm_imu_task/dm_imu_task.c
  * @Description: 
  */
@@ -13,7 +13,7 @@
 #include "osal_def.h"
 #include "modules_config.h"
 
-#if DM_IMU_ENABLE
+#ifdef DM_IMU_MODULE
 
 #define log_tag  "dm_imu_task"
 #include "log.h"

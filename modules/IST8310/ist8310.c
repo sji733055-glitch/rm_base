@@ -2,13 +2,14 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 11:11:09
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-11 15:55:08
+ * @LastEditTime: 2025-09-17 15:56:23
  * @FilePath: /rm_base/modules/IST8310/ist8310.c
  * @Description: 
  */
 #include "ist8310.h"
+#include "modules_config.h"
 
-#if IST8310_ENABLE
+#ifdef IST8310_MODULE
 
 #include "bsp_dwt.h"
 #include "bsp_i2c.h"

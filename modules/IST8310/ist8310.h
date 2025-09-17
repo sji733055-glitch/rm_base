@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 11:11:15
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-11 15:45:10
+ * @LastEditTime: 2025-09-17 15:56:56
  * @FilePath: /rm_base/modules/IST8310/ist8310.h
  * @Description: 
  */
@@ -10,12 +10,7 @@
 #define _IST8310_H_
 
 #include "bsp_i2c.h"
-#include "modules_config.h"
 #include "osal_def.h"
-
-// 传感器灵敏度系数
-#define MAG_SEN 0.3f // 原始整型数据变成 单位ut
-#define IST8310_IIC_ADDRESS 0x0E  // IST8310的从设备IIC地址
 
 typedef struct
 {

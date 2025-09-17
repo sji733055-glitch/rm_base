@@ -7,12 +7,15 @@
  * @Description: 
  */
 #include "rgb.h"
+
+#include "modules_config.h"
+//#define RGB_MODULE  
+
+#ifdef RGB_MODULE
+
 #include "bsp_pwm.h"
 #include <string.h>
 
-#include "modules_config.h"
-
-#if RGB_ENABLE
 
 #define log_tag "RGB"
 #include "log.h"

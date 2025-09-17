@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-08-06 10:31:16
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 13:02:00
+ * @LastEditTime: 2025-09-17 16:25:05
  * @FilePath: /rm_base/modules/BEEP/beep.c
  * @Description: 蜂鸣器模块，基于BSP_PWM组件实现
  */
@@ -15,7 +15,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#if BEEP_ENBALE
+#ifdef BEEP_MODULE
 
 // 蜂鸣器设备实例
 static PWM_Device* beep_pwm_dev = NULL;

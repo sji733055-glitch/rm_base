@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-16 10:10:42
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 13:01:55
+ * @LastEditTime: 2025-09-17 16:11:54
  * @FilePath: /rm_base/modules/DM_IMU/dm_imu.c
  * @Description: 
  */
@@ -15,7 +15,7 @@
 #include <string.h>
 
 
-#if DM_IMU_ENABLE
+#ifdef DM_IMU_MODULE
 
 #define log_tag  "dm_imu"
 #include "log.h"

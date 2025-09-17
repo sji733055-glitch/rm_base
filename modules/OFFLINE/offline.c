@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 19:45:50
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-16 09:37:58
+ * @LastEditTime: 2025-09-17 16:08:08
  * @FilePath: /rm_base/modules/OFFLINE/offline.c
  * @Description: 
  */
@@ -14,10 +14,10 @@
 #include <stdint.h>
 #include "shell.h"
 
+#ifdef OFFLINE_MODULE
+
 #define log_tag  "offline"
 #include "log.h"
-
-#if OFFLINE_MODULE_ENABLE
 
 // 静态变量
 static OfflineManager_t offline_manager;

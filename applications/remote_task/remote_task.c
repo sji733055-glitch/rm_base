@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-15 23:49:44
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 13:10:56
+ * @LastEditTime: 2025-09-17 16:10:40
  * @FilePath: /rm_base/applications/remote_task/remote_task.c
  * @Description: 
  */
@@ -13,7 +13,7 @@
 
 #include "modules_config.h"
 
-#if REMOTE_ENABLE
+#ifdef REMOTE_MODULE
 
 #define log_tag  "remote_task"
 #include "log.h"

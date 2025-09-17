@@ -2,18 +2,17 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-15 09:18:31
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 13:00:40
+ * @LastEditTime: 2025-09-17 16:10:17
  * @FilePath: /rm_base/modules/REMOTE/remote.c
  * @Description: 
  */
 #include "remote.h"
 #include "modules_config.h"
-#include "offline.h"
 #include "osal_def.h"
 #include <stdint.h>
 #include <string.h>
 
-#if REMOTE_ENABLE
+#ifdef REMOTE_MODULE
 
 #define log_tag "remote"
 #include "log.h"

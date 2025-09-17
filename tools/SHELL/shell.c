@@ -15,6 +15,8 @@
 #include "osal_def.h"
 #include "tools_config.h"
 
+#ifdef  SHELL_MODULE
+
 // 全局shell上下文
 static shell_context_t g_shell_ctx;
 static uint8_t shell_rx_buffer[SHELL_BUFFER_SIZE][2]; // 双缓冲区，每个缓冲区2字节
@@ -444,4 +446,9 @@ int shell_register_function(const char* name, shell_cmd_func_t func, const char*
     
     return 0;
 }
-
+#else  
+void shell_init(){}
+void shell_printf(const char *fmt, ...){}
+void shell_send(const uint8_t *data, uint16_t len){}
+int shell_register_function(const char* name, shell_cmd_func_t func, const char* description){return -1;}
+#endif
