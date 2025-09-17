@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-09 17:03:48
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 16:28:40
+ * @LastEditTime: 2025-09-17 16:36:08
  * @FilePath: /rm_base/BSP/CAN/bsp_can.c
  * @Description: 
  */
@@ -199,6 +199,11 @@ osal_status_t BSP_CAN_SendDevice(Can_Device *device)
     
     HAL_StatusTypeDef status;
     
+    // 检查是否有空闲的发送邮箱
+    if (HAL_CAN_GetTxMailboxesFreeLevel(device->can_handle) == 0) {
+        return OSAL_ERROR; 
+    }
+    
     // 获取互斥锁保护
     CANBusManager *bus_manager = NULL;
     for (int i = 0; i < CAN_BUS_NUM; i++) {
@@ -264,15 +269,15 @@ osal_status_t BSP_CAN_SendDevice(Can_Device *device)
     return OSAL_SUCCESS;
 }
 
-/**
- * @description: 发送CAN消息
- * @param {CanTxMessage_t*} tx_message
- * @return {*}
- */
 osal_status_t BSP_CAN_SendMessage(CanTxMessage_t *tx_message,uint8_t mode)
 {
     if (tx_message == NULL) {
         return OSAL_INVALID_PARAM;
+    }
+    
+    // 检查是否有空闲的发送邮箱
+    if (HAL_CAN_GetTxMailboxesFreeLevel(tx_message->can_handle) == 0) {
+        return OSAL_ERROR; 
     }
     
     // 获取互斥锁保护
