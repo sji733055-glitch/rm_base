@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-15 09:18:31
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 16:10:17
+ * @LastEditTime: 2025-09-18 10:59:01
  * @FilePath: /rm_base/modules/REMOTE/remote.c
  * @Description: 
  */
@@ -39,8 +39,6 @@ osal_status_t remote_init(void)
     } else {
         ret = OSAL_ERROR;
     }
-#else 
-#error REMOTE_SOURCE is not defined
 #endif
 
 #if defined(REMOTE_VT_SOURCE) && REMOTE_VT_SOURCE == 1
@@ -59,7 +57,7 @@ osal_status_t remote_init(void)
     }
 #endif
 
-    if (ret == OSAL_SUCCESS)
+    if (ret == OSAL_SUCCESS && REMOTE_SOURCE !=0 && REMOTE_VT_SOURCE !=0)
     {
         remote_instance.initflag = 1;
         LOG_INFO("remote init success");
