@@ -346,3 +346,28 @@ float uint_to_float(int x_int, float x_min, float x_max, int bits)
 	float offset = x_min;
 	return ((float)x_int)*span/((float)((1<<bits)-1)) + offset;
 }
+int16_t currentToInteger(float I_min,float I_max,int16_t V_min,int16_t V_max,float current) {
+    int16_t V = (int)((current - I_min) / (I_max - I_min) * (V_max - V_min) + V_min);
+    if (V >V_max)
+    {
+        V=V_max;
+    }
+    if (V<V_min)
+    {
+        V=V_min;
+    }
+    return V;
+}
+
+float IntegerToCurrent(float I_min,float I_max,int16_t V_min,int16_t V_max,int16_t V) {
+    float I = (float)(V - V_min) / (float)(V_max - V_min) * (I_max - I_min) + I_min;
+    if (I >I_max)
+    {
+        I=I_max;
+    }
+    if (I<I_min)
+    {
+        I=I_min;
+    }
+    return I;
+}

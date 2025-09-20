@@ -2,12 +2,18 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-17 10:52:48
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 16:24:56
+ * @LastEditTime: 2025-09-20 10:07:29
  * @FilePath: /rm_base/CONFIG/robot_config.h
  * @Description: 
  */
 #ifndef _ROBOT_CONFIG_H_
 #define _ROBOT_CONFIG_H_
+
+/* 电机声明 */
+#define MOTOR_NONE                        0
+#define MOTOR_DJI                         (1 << 0)
+#define MOTOR_DM                          (1 << 1)
+
 
 /* 机器人通讯定义*/
 
@@ -31,6 +37,7 @@
 #define REMOTE_MODULE
 #define SHELL_MODULE
 #define LOG_MODULE
+#define MOTOR_MODULE_USE                  (MOTOR_DJI | MOTOR_DM)
 #else
     #ifdef GIMBAL_BOARD
         #define RGB_MODULE
@@ -41,6 +48,7 @@
         #define DM_IMU_MODULE 
         #define SHELL_MODULE
         #define LOG_MODULE
+        #define MOTOR_MODULE_USE                  (MOTOR_DJI | MOTOR_DM)
     #endif 
     #ifdef CHASSIS_BOARD
         #define RGB_MODULE
@@ -49,6 +57,7 @@
         #define BEEP_MODULE
         #define SHELL_MODULE
         #define LOG_MODULE
+        #define MOTOR_MODULE_USE                  (MOTOR_DJI | MOTOR_DM)
     #endif 
 #endif
 /* 可用模块列表
@@ -61,6 +70,7 @@
  * #define DM_IMU_MODULE      // 达妙IMU模块
  * #define SHELL_MODULE       // shell功能模块
  * #define LOG_MODULE         // 启用日志功能
+ * #define MOTOR_MODULE_USE   (MOTOR_DJI | MOTOR_DM)  // 电机模块
 */
 
 /* 机器人关键参数定义 ,(这里参数根据机器人实际自行定义) */  //1 表示开启 0 表示关闭

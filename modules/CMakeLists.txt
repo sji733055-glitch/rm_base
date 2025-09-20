@@ -24,6 +24,7 @@ add_library(${name} STATIC
     REMOTE/VT02/vt02.c
     REMOTE/VT03/vt03.c
     DM_IMU/dm_imu.c
+    MOTOR/DJI/dji.c
 )
 
 # 设置包含目录
@@ -44,6 +45,8 @@ target_include_directories(${name}
     ${CMAKE_CURRENT_SOURCE_DIR}/REMOTE/VT02
     ${CMAKE_CURRENT_SOURCE_DIR}/REMOTE/VT03
     ${CMAKE_CURRENT_SOURCE_DIR}/DM_IMU
+    ${CMAKE_CURRENT_SOURCE_DIR}/MOTOR
+    ${CMAKE_CURRENT_SOURCE_DIR}/MOTOR/DJI
 )
 
 # 链接必要的库

@@ -170,5 +170,26 @@ int float_to_uint(float x_float, float x_min, float x_max, int bits);
  * @return {float},浮点数结果
  */
 float uint_to_float(int x_int, float x_min, float x_max, int bits);
-
+/**
+ * @brief 将给定的电流值转换为对应的整数值
+ * @param {float} I_min: 电流最小值
+ * @param {float} I_max: 电流最大值
+ * @param {int16_t} V_min: 电压最小值
+ * @param {int16_t} V_max: 电压最大值
+ * @param {float} current: 电流值
+ * @note  将给定的电流值转换为对应的整数值
+ * @return {int16_t} 整数值
+ */
+int16_t currentToInteger(float I_min,float I_max,int16_t V_min,int16_t V_max,float current);
+/**
+ * @brief 将给定的整数值转换为对应的电流值
+ * @param {float} I_min: 电流最小值
+ * @param {float} I_max: 电流最大值
+ * @param {int16_t} V_min: 电压最小值
+ * @param {int16_t} V_max: 电压最大值
+ * @param {int16_t} integer: 整数值
+ * @note  将给定的整数值转换为对应的电流值
+ * @return {float} 电流值
+ */
+float IntegerToCurrent(float I_min,float I_max,int16_t V_min,int16_t V_max,int16_t V);
 #endif

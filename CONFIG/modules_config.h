@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 10:28:00
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 16:10:56
+ * @LastEditTime: 2025-09-20 09:02:08
  * @FilePath: /rm_base/CONFIG/modules_config.h
  * @Description: 
  */
@@ -47,5 +47,8 @@
 #define DM_IMU_RX_ID                      0x11                                  // 达妙IMU的接收
 #define DM_IMU_TX_ID                      0x6FF                                 // 达妙IMU的发送
 #define DM_IMU_CAN_BUS                    hcan2                                 // 达妙IMU使用的CAN总线
+/* 电机模块 */
+/* DJI电机模块 */
+#define DJI_MOTOR_CNT                     8                                     //DJI电机数量
 
 #endif // _MODULES_CONFIG_H_
