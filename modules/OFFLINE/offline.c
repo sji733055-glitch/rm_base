@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 19:45:50
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-21 10:42:36
+ * @LastEditTime: 2025-09-21 11:24:11
  * @FilePath: /rm_base/modules/OFFLINE/offline.c
  * @Description: 
  */
@@ -33,19 +33,6 @@ void offline_set_data_pointers(OfflineManager_t* manager, uint8_t* beep_times) {
     current_beep_times_ptr = beep_times;
 }
 
-// 添加锁操作函数
-static void offline_mutex_lock(void) {
-    if (offline_manager_ptr) {
-        osal_mutex_lock(&offline_manager_ptr->mutex, OSAL_WAIT_FOREVER);
-    }
-}
-
-static void offline_mutex_unlock(void) {
-    if (offline_manager_ptr) {
-        osal_mutex_unlock(&offline_manager_ptr->mutex);
-    }
-}
-
 void offline_init(void)
 {
     beep_init(2000, 10, beep_ctrl_times);
@@ -61,7 +48,8 @@ uint8_t offline_device_register(const OfflineDeviceInit_t* init)
         return OFFLINE_INVALID_INDEX;
     }
 
-    offline_mutex_lock(); 
+    
+    osal_mutex_lock(&offline_manager_ptr->mutex, OSAL_WAIT_FOREVER);
     
     uint8_t index = offline_manager_ptr->device_count;
     OfflineDevice_t* device = &offline_manager_ptr->devices[index];
@@ -78,7 +66,7 @@ uint8_t offline_device_register(const OfflineDeviceInit_t* init)
     
     offline_manager_ptr->device_count++;
 
-    offline_mutex_unlock();
+    osal_mutex_unlock(&offline_manager_ptr->mutex);
 
     LOG_INFO("offline device register: %s", device->name);
 
@@ -88,38 +76,31 @@ uint8_t offline_device_register(const OfflineDeviceInit_t* init)
 void offline_device_update(uint8_t device_index)
 {
     if (offline_manager_ptr != NULL) {
-        offline_mutex_lock();
         if (device_index < offline_manager_ptr->device_count) {
             offline_manager_ptr->devices[device_index].last_time = tx_time_get();
         }   
-        offline_mutex_unlock();
     }
 }
 
 void offline_device_enable(uint8_t device_index)
 {
     if (offline_manager_ptr != NULL) {
-        offline_mutex_lock();
         if (device_index < offline_manager_ptr->device_count) {
             offline_manager_ptr->devices[device_index].enable = OFFLINE_ENABLE;
         }
-        offline_mutex_unlock();
     }
 }
 
 void offline_device_disable(uint8_t device_index)
 {
     if (offline_manager_ptr != NULL) {
-        offline_mutex_lock();
         if (device_index < offline_manager_ptr->device_count) {
             offline_manager_ptr->devices[device_index].enable = OFFLINE_DISABLE;
         }
-        offline_mutex_unlock();
     }
 }
 uint8_t get_device_status(uint8_t device_index){
     if (offline_manager_ptr != NULL) {
-        offline_mutex_lock();
         if(device_index < offline_manager_ptr->device_count){
             if (offline_manager_ptr->devices[device_index].enable == OFFLINE_ENABLE)
             {
@@ -129,7 +110,6 @@ uint8_t get_device_status(uint8_t device_index){
                 return STATE_ONLINE;
             }
         }
-        offline_mutex_unlock();
     }
     return STATE_OFFLINE;
 }
@@ -138,14 +118,12 @@ uint8_t get_system_status(void){
     if (offline_manager_ptr == NULL) {
         return STATE_OFFLINE;
     }else {
-        offline_mutex_lock();
         uint8_t status = 0;
         for (uint8_t i = 0; i < offline_manager_ptr->device_count; i++) {
             if (offline_manager_ptr->devices[i].is_offline) {
                 status |= (1 << i);
             }
         }
-        offline_mutex_unlock();
         return status;    
     }
 }
@@ -217,8 +195,7 @@ void shell_offline_cmd(int argc, char **argv)
             shell_printf("\r\n");
             return;
         }
-        
-        offline_mutex_lock(); 
+
 
         for (uint8_t i = 0; i < manager->device_count; i++) {
             const OfflineDevice_t* device = &manager->devices[i];
@@ -248,8 +225,6 @@ void shell_offline_cmd(int argc, char **argv)
                         level_str,
                         device->beep_times);
         }
-
-        offline_mutex_unlock(); 
         
         shell_printf("\r\nTotal devices: %d\r\n", manager->device_count);
         shell_printf("\r\n");
