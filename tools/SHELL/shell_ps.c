@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-10 14:46:33
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-10 21:52:01
+ * @LastEditTime: 2025-09-26 14:11:33
  * @FilePath: /rm_base/tools/SHELL/shell_ps.c
  * @Description: 
  */
@@ -22,17 +22,17 @@
 void shell_ps_cmd(int argc, char **argv) {
     if (argc < 2) {
         // 显示基本帮助信息
-        shell_printf("Usage: ps <object_type>\r\n");
-        shell_printf("Object types: thread, timer, mutex, sem, event, queue, bytepool, blockpool\r\n");
-        shell_printf("\r\n");
+        shell_module_printf("Usage: ps <object_type>\r\n");
+        shell_module_printf("Object types: thread, timer, mutex, sem, event, queue, bytepool, blockpool\r\n");
+        shell_module_printf("\r\n");
         return;
     }
     
     if (strcmp(argv[1], "thread") == 0) {
         // 显示线程信息
-        shell_printf("Thread Information:\r\n");
-        shell_printf("%-32s %-8s %-10s %-12s %-8s\r\n", "Name", "State", "Priority", "Stack Size", "Run Count");
-        shell_printf("------------------------------------------------------------------------\r\n");
+        shell_module_printf("Thread Information:\r\n");
+        shell_module_printf("%-32s %-8s %-10s %-12s %-8s\r\n", "Name", "State", "Priority", "Stack Size", "Run Count");
+        shell_module_printf("------------------------------------------------------------------------\r\n");
         
         TX_THREAD *thread_ptr = _tx_thread_created_ptr;
         if (thread_ptr) {
@@ -103,7 +103,7 @@ void shell_ps_cmd(int argc, char **argv) {
                             break;
                     }
                     
-                    shell_printf("%-32s %-8s %-10d %-12lu %-8lu\r\n", 
+                    shell_module_printf("%-32s %-8s %-10d %-12lu %-8lu\r\n", 
                                 name ? name : "N/A", 
                                 state_str, 
                                 priority, 
@@ -114,16 +114,16 @@ void shell_ps_cmd(int argc, char **argv) {
                 thread_ptr = thread_ptr -> tx_thread_created_next;
             } while (thread_ptr != _tx_thread_created_ptr);
         } else {
-            shell_printf("No threads created.\r\n");
+            shell_module_printf("No threads created.\r\n");
         }
-        shell_printf("\r\n");
+        shell_module_printf("\r\n");
         return;
     } 
     else if (strcmp(argv[1], "timer") == 0) {
         // 显示定时器信息
-        shell_printf("Timer Information:\r\n");
-        shell_printf("%-16s %-8s %-12s\r\n", "Name", "Active", "Reschedules");
-        shell_printf("----------------------------------------------------------------\r\n");
+        shell_module_printf("Timer Information:\r\n");
+        shell_module_printf("%-16s %-8s %-12s\r\n", "Name", "Active", "Reschedules");
+        shell_module_printf("----------------------------------------------------------------\r\n");
         
         TX_TIMER *timer_ptr = _tx_timer_created_ptr;
         if (timer_ptr && (ULONG)timer_ptr != TX_CLEAR_ID) {
@@ -138,7 +138,7 @@ void shell_ps_cmd(int argc, char **argv) {
                                                &reschedule_ticks, &next_timer);
                 
                 if (status == TX_SUCCESS) {
-                    shell_printf("%-16s %-8s %-12lu\r\n",
+                    shell_module_printf("%-16s %-8s %-12lu\r\n",
                                 name ? name : "N/A",
                                 active ? "YES" : "NO",
                                 reschedule_ticks);
@@ -148,16 +148,16 @@ void shell_ps_cmd(int argc, char **argv) {
                 if (timer_ptr == TX_NULL || (ULONG)timer_ptr == TX_CLEAR_ID) break;
             } while (timer_ptr != _tx_timer_created_ptr);
         } else {
-            shell_printf("No timers created.\r\n");
+            shell_module_printf("No timers created.\r\n");
         }
-        shell_printf("\r\n");
+        shell_module_printf("\r\n");
         return;
     }
     else if (strcmp(argv[1], "mutex") == 0) {
         // 显示互斥量信息
-        shell_printf("Mutex Information:\r\n");
-        shell_printf("%-16s %-8s %-16s\r\n", "Name", "Count", "Owner");
-        shell_printf("----------------------------------------------------------------\r\n");
+        shell_module_printf("Mutex Information:\r\n");
+        shell_module_printf("%-16s %-8s %-16s\r\n", "Name", "Count", "Owner");
+        shell_module_printf("----------------------------------------------------------------\r\n");
         
         TX_MUTEX *mutex_ptr = _tx_mutex_created_ptr;
         if (mutex_ptr && (ULONG)mutex_ptr != TX_CLEAR_ID) {
@@ -181,7 +181,7 @@ void shell_ps_cmd(int argc, char **argv) {
                             owner_name = "N/A";
                         }
                     }
-                    shell_printf("%-16s %-8lu %-16s\r\n",
+                    shell_module_printf("%-16s %-8lu %-16s\r\n",
                                 name ? name : "N/A",
                                 count_val,
                                 owner_name);
@@ -191,16 +191,16 @@ void shell_ps_cmd(int argc, char **argv) {
                 if (mutex_ptr == TX_NULL || (ULONG)mutex_ptr == TX_CLEAR_ID) break;
             } while (mutex_ptr != _tx_mutex_created_ptr);
         } else {
-            shell_printf("No mutexes created.\r\n");
+            shell_module_printf("No mutexes created.\r\n");
         }
-        shell_printf("\r\n");
+        shell_module_printf("\r\n");
         return;
     }
     else if (strcmp(argv[1], "sem") == 0) {
         // 显示信号量信息
-        shell_printf("Semaphore Information:\r\n");
-        shell_printf("%-16s %-12s %-12s\r\n", "Name", "Current Count", "Suspended");
-        shell_printf("----------------------------------------------------------------\r\n");
+        shell_module_printf("Semaphore Information:\r\n");
+        shell_module_printf("%-16s %-12s %-12s\r\n", "Name", "Current Count", "Suspended");
+        shell_module_printf("----------------------------------------------------------------\r\n");
         
         TX_SEMAPHORE *semaphore_ptr = _tx_semaphore_created_ptr;
         if (semaphore_ptr && (ULONG)semaphore_ptr != TX_CLEAR_ID) {
@@ -215,7 +215,7 @@ void shell_ps_cmd(int argc, char **argv) {
                                                    &first_suspended, &suspended_count, &next_semaphore);
                 
                 if (status == TX_SUCCESS) {
-                    shell_printf("%-16s %-12lu %-12lu\r\n",
+                    shell_module_printf("%-16s %-12lu %-12lu\r\n",
                                 name ? name : "N/A",
                                 current_value,
                                 suspended_count);
@@ -225,16 +225,16 @@ void shell_ps_cmd(int argc, char **argv) {
                 if (semaphore_ptr == TX_NULL || (ULONG)semaphore_ptr == TX_CLEAR_ID) break;
             } while (semaphore_ptr != _tx_semaphore_created_ptr);
         } else {
-            shell_printf("No semaphores created.\r\n");
+            shell_module_printf("No semaphores created.\r\n");
         }
-        shell_printf("\r\n");
+        shell_module_printf("\r\n");
         return;
     }
     else if (strcmp(argv[1], "event") == 0) {
         // 显示事件标志组信息
-        shell_printf("Event Flags Information:\r\n");
-        shell_printf("%-16s %-12s %-12s\r\n", "Name", "Current Flags", "Suspended");
-        shell_printf("----------------------------------------------------------------\r\n");
+        shell_module_printf("Event Flags Information:\r\n");
+        shell_module_printf("%-16s %-12s %-12s\r\n", "Name", "Current Flags", "Suspended");
+        shell_module_printf("----------------------------------------------------------------\r\n");
         
         TX_EVENT_FLAGS_GROUP *event_ptr = _tx_event_flags_created_ptr;
         if (event_ptr && (ULONG)event_ptr != TX_CLEAR_ID) {
@@ -249,7 +249,7 @@ void shell_ps_cmd(int argc, char **argv) {
                                                      &first_suspended, &suspended_count, &next_event);
                 
                 if (status == TX_SUCCESS) {
-                    shell_printf("%-16s 0x%-10lx %-12lu\r\n",
+                    shell_module_printf("%-16s 0x%-10lx %-12lu\r\n",
                                 name ? name : "N/A",
                                 current_flags,
                                 suspended_count);
@@ -259,16 +259,16 @@ void shell_ps_cmd(int argc, char **argv) {
                 if (event_ptr == TX_NULL || (ULONG)event_ptr == TX_CLEAR_ID) break;
             } while (event_ptr != _tx_event_flags_created_ptr);
         } else {
-            shell_printf("No event flags created.\r\n");
+            shell_module_printf("No event flags created.\r\n");
         }
-        shell_printf("\r\n");
+        shell_module_printf("\r\n");
         return;
     }
     else if (strcmp(argv[1], "queue") == 0) {
         // 显示队列信息
-        shell_printf("Queue Information:\r\n");
-        shell_printf("%-16s %-10s %-10s %-10s\r\n", "Name", "Enqueued", "Available", "Suspended");
-        shell_printf("----------------------------------------------------------------\r\n");
+        shell_module_printf("Queue Information:\r\n");
+        shell_module_printf("%-16s %-10s %-10s %-10s\r\n", "Name", "Enqueued", "Available", "Suspended");
+        shell_module_printf("----------------------------------------------------------------\r\n");
         
         TX_QUEUE *queue_ptr = _tx_queue_created_ptr;
         if (queue_ptr && (ULONG)queue_ptr != TX_CLEAR_ID) {
@@ -284,7 +284,7 @@ void shell_ps_cmd(int argc, char **argv) {
                                                &first_suspended, &suspended_count, &next_queue);
                 
                 if (status == TX_SUCCESS) {
-                    shell_printf("%-16s %-10lu %-10lu %-10lu\r\n",
+                    shell_module_printf("%-16s %-10lu %-10lu %-10lu\r\n",
                                 name ? name : "N/A",
                                 enqueued,
                                 available_storage,
@@ -295,16 +295,16 @@ void shell_ps_cmd(int argc, char **argv) {
                 if (queue_ptr == TX_NULL || (ULONG)queue_ptr == TX_CLEAR_ID) break;
             } while (queue_ptr != _tx_queue_created_ptr);
         } else {
-            shell_printf("No queues created.\r\n");
+            shell_module_printf("No queues created.\r\n");
         }
-        shell_printf("\r\n");
+        shell_module_printf("\r\n");
         return;
     }
     else if (strcmp(argv[1], "bytepool") == 0) {
         // 显示字节池信息
-        shell_printf("Byte Pool Information:\r\n");
-        shell_printf("%-16s %-12s %-12s\r\n", "Name", "Available", "Fragments");
-        shell_printf("----------------------------------------------------------------\r\n");
+        shell_module_printf("Byte Pool Information:\r\n");
+        shell_module_printf("%-16s %-12s %-12s\r\n", "Name", "Available", "Fragments");
+        shell_module_printf("----------------------------------------------------------------\r\n");
         
         TX_BYTE_POOL *byte_pool_ptr = _tx_byte_pool_created_ptr;
         if (byte_pool_ptr && (ULONG)byte_pool_ptr != TX_CLEAR_ID) {
@@ -321,7 +321,7 @@ void shell_ps_cmd(int argc, char **argv) {
                                                    &suspended_count, &next_pool);
                 
                 if (status == TX_SUCCESS) {
-                    shell_printf("%-16s %-12lu %-12lu\r\n",
+                    shell_module_printf("%-16s %-12lu %-12lu\r\n",
                                 name ? name : "N/A",
                                 available_bytes,
                                 fragments);
@@ -331,16 +331,16 @@ void shell_ps_cmd(int argc, char **argv) {
                 if (byte_pool_ptr == TX_NULL || (ULONG)byte_pool_ptr == TX_CLEAR_ID) break;
             } while (byte_pool_ptr != _tx_byte_pool_created_ptr);
         } else {
-            shell_printf("No byte pools created.\r\n");
+            shell_module_printf("No byte pools created.\r\n");
         }
-        shell_printf("\r\n");
+        shell_module_printf("\r\n");
         return;
     }
     else if (strcmp(argv[1], "blockpool") == 0) {
         // 显示块池信息
-        shell_printf("Block Pool Information:\r\n");
-        shell_printf("%-16s %-10s %-10s %-10s\r\n", "Name", "Available", "Total", "Suspended");
-        shell_printf("----------------------------------------------------------------\r\n");
+        shell_module_printf("Block Pool Information:\r\n");
+        shell_module_printf("%-16s %-10s %-10s %-10s\r\n", "Name", "Available", "Total", "Suspended");
+        shell_module_printf("----------------------------------------------------------------\r\n");
         
         TX_BLOCK_POOL *block_pool_ptr = _tx_block_pool_created_ptr;
         if (block_pool_ptr && (ULONG)block_pool_ptr != TX_CLEAR_ID) {
@@ -357,7 +357,7 @@ void shell_ps_cmd(int argc, char **argv) {
                                                     &suspended_count, &next_pool);
                 
                 if (status == TX_SUCCESS) {
-                    shell_printf("%-16s %-10lu %-10lu %-10lu\r\n",
+                    shell_module_printf("%-16s %-10lu %-10lu %-10lu\r\n",
                                 name ? name : "N/A",
                                 available_blocks,
                                 total_blocks,
@@ -368,15 +368,15 @@ void shell_ps_cmd(int argc, char **argv) {
                 if (block_pool_ptr == TX_NULL || (ULONG)block_pool_ptr == TX_CLEAR_ID) break;
             } while (block_pool_ptr != _tx_block_pool_created_ptr);
         } else {
-            shell_printf("No block pools created.\r\n");
+            shell_module_printf("No block pools created.\r\n");
         }
-        shell_printf("\r\n");
+        shell_module_printf("\r\n");
         return;
     }
     else {
-        shell_printf("Unknown object type: %s\r\n", argv[1]);
-        shell_printf("Supported types: thread, timer, mutex, sem, event, queue, bytepool, blockpool\r\n");
-        shell_printf("\r\n");
+        shell_module_printf("Unknown object type: %s\r\n", argv[1]);
+        shell_module_printf("Supported types: thread, timer, mutex, sem, event, queue, bytepool, blockpool\r\n");
+        shell_module_printf("\r\n");
         return;
     }
 }

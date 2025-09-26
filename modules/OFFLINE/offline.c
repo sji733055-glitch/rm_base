@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 19:45:50
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-21 11:24:11
+ * @LastEditTime: 2025-09-26 14:21:39
  * @FilePath: /rm_base/modules/OFFLINE/offline.c
  * @Description: 
  */
@@ -24,7 +24,6 @@ static OfflineManager_t* offline_manager_ptr = NULL;
 static uint8_t* current_beep_times_ptr = NULL;
 // 函数声明
 static void beep_ctrl_times(ULONG timer);
-static void shell_offline_cmd(int argc, char **argv);
 
 
 // 设置静态变量指针
@@ -37,7 +36,6 @@ void offline_init(void)
 {
     beep_init(2000, 10, beep_ctrl_times);
     
-    shell_register_function("offline", shell_offline_cmd, "Show offline device information");
 
     LOG_INFO("Offline init successfully.");
 }
@@ -166,86 +164,6 @@ void beep_ctrl_times(ULONG timer)
     }else {
         // 确保在指针无效时关闭蜂鸣器
         beep_set_tune(0, 0);
-    }
-}
-
-// shell命令处理函数
-void shell_offline_cmd(int argc, char **argv)
-{
-    const OfflineManager_t* manager = offline_manager_ptr;
-    
-    if (argc < 2) {
-        // 显示帮助信息
-        shell_printf("Usage: offline <command>\r\n");
-        shell_printf("Commands:\r\n");
-        shell_printf("  list     - List all registered devices and their status\r\n");
-        shell_printf("  status   - Show overall system offline status\r\n");
-        shell_printf("\r\n");
-        return;
-    }
-    
-    if (strcmp(argv[1], "list") == 0) {
-        // 显示所有注册设备及其状态
-        shell_printf("Offline Device List:\r\n");
-        shell_printf("Index %-20s %-10s %-10s %-8s %-10s\r\n", "Name", "Status", "Timeout", "Level", "BeepTimes");
-        shell_printf("-------------------------------------------------------------------------\r\n");
-        
-        if (manager->device_count == 0) {
-            shell_printf("No devices registered.\r\n");
-            shell_printf("\r\n");
-            return;
-        }
-
-
-        for (uint8_t i = 0; i < manager->device_count; i++) {
-            const OfflineDevice_t* device = &manager->devices[i];
-            const char* status_str = device->is_offline ? "OFFLINE" : "ONLINE";
-            const char* level_str = "";
-            
-            switch (device->level) {
-                case OFFLINE_LEVEL_LOW:
-                    level_str = "LOW";
-                    break;
-                case OFFLINE_LEVEL_MEDIUM:
-                    level_str = "MEDIUM";
-                    break;
-                case OFFLINE_LEVEL_HIGH:
-                    level_str = "HIGH";
-                    break;
-                default:
-                    level_str = "UNKNOWN";
-                    break;
-            }
-            
-            shell_printf("%-5d %-20s %-10s %-10lu %-8s %-10d\r\n", 
-                        device->index,
-                        device->name,
-                        status_str,
-                        device->timeout_ms,
-                        level_str,
-                        device->beep_times);
-        }
-        
-        shell_printf("\r\nTotal devices: %d\r\n", manager->device_count);
-        shell_printf("\r\n");
-    } 
-    else if (strcmp(argv[1], "status") == 0) {
-        // 显示系统整体离线状态
-        uint8_t system_status = get_system_status();
-        
-        if (system_status) {
-            shell_printf("Status: OFFLINE\r\n");
-            shell_printf("Some devices are offline!\r\n");
-        } else {
-            shell_printf("Status: ALL ONLINE\r\n");
-            shell_printf("All devices are online.\r\n");
-        }
-        shell_printf("\r\n");
-    }
-    else {
-        shell_printf("Unknown command: %s\r\n", argv[1]);
-        shell_printf("Use 'offline' without arguments to see help.\r\n");
-        shell_printf("\r\n");
     }
 }
 

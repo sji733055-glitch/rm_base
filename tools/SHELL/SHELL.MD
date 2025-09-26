@@ -2,47 +2,46 @@
 
 ## 概述
 
-Shell 是一个基于 OSAL 的命令行接口工具，提供了统一的接口来与系统进行交互。该工具支持命令注册、历史命令、命令解析和执行等功能。
+Shell 是一个基于 OSAL 的命令行接口工具，提供了统一的接口来与系统进行交互。该工具支持命令注册、命令解析和执行等功能。
 
 ## 特性
 
 - 支持命令行交互界面
-- 命令历史记录功能
 - 支持 ANSI 转义序列（清屏等）
 - 双缓冲区机制提高接收效率
-- 基于 OSAL 事件的异步通知机制
+- 基于 OSAL 的线程安全机制
 - 支持多个命令动态注册
 - 支持 RTT 和 UART 两种通信方式
+- 分层设计，模块化实现
   
   ## 数据结构
   
   ### shell_cmd_func_t
-  
-  ```c
+
+- ```c
   typedef void (*shell_cmd_func_t)(int argc, char **argv);
   ```
   
   > 命令处理函数指针类型，所有命令处理函数都应遵循此原型。
   
-  ### shell_context_t
+  ### Shell_Module_t
   
-  Shell上下文结构体，包含Shell运行所需的所有状态信息。
+  Shell模块结构体，包含Shell运行所需的所有状态信息。
   
   ```c
-  typedef struct {
-      UART_Device *uart_dev;              // UART设备
-      char cmd_buffer[SHELL_CMD_MAX_LENGTH]; // 命令缓冲区
-      uint16_t cmd_len;                   // 命令长度
-      char *args[SHELL_MAX_ARGS];         // 参数指针数组
-      uint8_t argc;                       // 参数数量
-      char history[SHELL_HISTORY_MAX][SHELL_CMD_MAX_LENGTH]; // 历史命令
-      uint8_t history_count;              // 历史命令数量
-      uint8_t history_index;              // 当前历史命令索引
-      TX_THREAD thread;                   // shell线程
-      TX_MUTEX mutex;                     // 互斥锁
-      bool running;                       // 运行状态
-      bool initialized;                   // 初始化状态
-  } shell_context_t;
+  typedef struct Shell_Module{
+      UART_Device *uart_dev;                                            // UART设备
+      char cmd_buffer[SHELL_CMD_MAX_LENGTH];                            // 命令缓冲区
+      uint16_t cmd_len;                                                 // 命令长度
+      char *args[SHELL_MAX_ARGS];                                       // 参数指针数组
+      uint8_t argc;                                                     // 参数数量
+      osal_mutex_t mutex;                                               // 互斥锁
+      shell_cmd_t dynamic_cmds[SHELL_MAX_DYNAMIC_COMMANDS];             // 动态注册命令表
+      int dynamic_cmd_count;                                            // 动态注册命令数量
+      bool initialized;                                                 // 初始化状态
+      bool use_rtt;                                                     // 是否使用rtt作为shell输出
+      uint8_t escape_sequence;                                          // 转义序列状态（处理箭头键）
+  } Shell_Module_t;
   ```
   
   ## 配置参数
@@ -65,19 +64,19 @@ Shell 是一个基于 OSAL 的命令行接口工具，提供了统一的接口�
   ## API 接口
   
   ```c
-  void shell_init();
+  osal_status_t shell_module_init(Shell_Module_t *shell);
   ```
   
   ```c
-  void shell_printf(const char *fmt, ...);
+  void shell_module_printf(const char *fmt, ...);
   ```
   
   ```c
-  void shell_send(const uint8_t *data, uint16_t len);
+  void shell_module_period_process();
   ```
   
   ```c
-  int shell_register_function(const char* name, shell_cmd_func_t func, const char* description);
+  osal_status_t shell_module_register_cmd(const char *name, shell_cmd_func_t func, const char *description);
   ```
   
   ## 内置命令
@@ -111,7 +110,7 @@ Shell 是一个基于 OSAL 的命令行接口工具，提供了统一的接口�
           shell_printf("Usage: mycmd <param>\r\n");
           return;
       }
-      
+  
       shell_printf("Received parameter: %s\r\n", argv[1]);
   }
   
@@ -148,22 +147,22 @@ Shell 是一个基于 OSAL 的命令行接口工具，提供了统一的接口�
   Received parameter: test_parameter
   ```
   
-  ## 工作原理
+  #### 工作原理
   
-  ### 线程模型
+  ### 分层架构
   
-  Shell在独立的线程中运行，通过UART或RTT接收用户输入，解析命令并执行相应的处理函数。
+  Shell采用分层设计：
+  
+  1. **Module层** - 核心功能实现，提供统一接口
+  2. **Task层** - 线程管理，数据持有和周期性调用
   
   ### 命令处理流程
+  
   1. 用户输入命令
   2. Shell解析命令和参数
   3. 查找匹配的命令处理函数
   4. 调用命令处理函数执行具体操作
-  5. 返回结果通过shell_printf输出
-  
-  ### 历史命令
-  
-  Shell维护一个历史命令缓冲区，用户可以通过上下箭头键浏览之前输入的命令。
+  5. 返回结果通过shell_module_printf输出
   
   ## 注意事项
   
@@ -186,11 +185,3 @@ Shell 是一个基于 OSAL 的命令行接口工具，提供了统一的接口�
   - 命令注册失败（命令已存在或超出最大命令数量）
   
   对于这些情况，Shell会输出相应的错误信息提示用户。
-  
-  ```c
-  
-  ```
-  
-  
-
-
