@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 19:45:56
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-27 22:57:16
+ * @LastEditTime: 2025-09-30 14:26:38
  * @FilePath: /rm_base/modules/OFFLINE/offline.h
  * @Description: 
  */
@@ -103,9 +103,10 @@ uint8_t offline_module_get_device_status(uint8_t device_index);
  */
 uint8_t offline_module_get_system_status(void);
 /**
- * @description: 离线模块周期性处理函数
+ * @description: 注册shell命令处理函数
+ * @param {OfflineManager_t*} manager 离线管理器指针
  * @return {*}
  */
-void offline_module_period_process(void);
+void offline_module_register_shell_cmd(OfflineManager_t* manager);
 
 #endif // _OFFLINE_H_

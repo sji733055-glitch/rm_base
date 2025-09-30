@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-14 12:50:59
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-30 13:57:30
+ * @LastEditTime: 2025-09-30 14:30:35
  * @FilePath: /rm_base/applications/offline_task/offline_task.c
  * @Description: 
  */
@@ -115,6 +115,8 @@ void offline_task_init(){
     osal_mutex_create(&offline_manager.mutex,"offline_manager_mutex");
 
     offline_module_init(&offline_manager, &current_beep_times);
+
+    offline_module_register_shell_cmd(&offline_manager);
 
     osal_status_t status = osal_thread_create(&offline_thread, "offlineTask", offline_task, 
     0,offline_thread_stack, OFFLINE_THREAD_STACK_SIZE,OFFLINE_THREAD_PRIORITY);

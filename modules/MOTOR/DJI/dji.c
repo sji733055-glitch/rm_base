@@ -160,7 +160,7 @@ void DecodeDJIMotor(uint8_t dji_idx)
     else if (delta_ecd < -4096) {dji_motor_list[dji_idx].measure.total_round++;}
     dji_motor_list[dji_idx].measure.total_angle = dji_motor_list[dji_idx].measure.total_round * 360.0f + dji_motor_list[dji_idx].measure.angle_single_round;
     // 更新在线状态
-    offline_device_update(dji_motor_list[dji_idx].offline_index);
+    offline_module_device_update(dji_motor_list[dji_idx].offline_index);
 }
 
  
@@ -220,7 +220,7 @@ DJIMotor_t *DJIMotorInit(Motor_Init_Config_s *config)
     }
 
     //掉线检测
-    DJIMotor->offline_index =offline_device_register(&config->offline_device_motor);
+    DJIMotor->offline_index =offline_module_device_register(&config->offline_device_motor);
     
     // 增加索引并返回对应元素的地址
     DJIMotor->idx = idx;
@@ -381,7 +381,7 @@ void DJIMotorControl(void)
         if (i >= DJI_MOTOR_CNT || dji_motor_list[i].can_device == NULL){continue;}
         
         motor = &dji_motor_list[i];
-        if (get_device_status(motor->offline_index)== STATE_OFFLINE || motor->stop_flag == MOTOR_STOP) {
+        if (offline_module_get_device_status(motor->offline_index)== STATE_OFFLINE || motor->stop_flag == MOTOR_STOP) {
             control_output = 0;
             if (motor->motor_settings.control_algorithm == CONTROL_PID)
             {

@@ -16,6 +16,7 @@ add_library(${name} STATIC
     algorithm/crc_rm.c
     BEEP/beep.c
     OFFLINE/offline.c
+    OFFLINE/offline_shellcmd.c
     INS/ins.c
     INS/QuaternionEKF.c
     REMOTE/remote.c

@@ -66,6 +66,8 @@ OFFLINE 离线检测模块是一个基于 OSAL（操作系统抽象层）的设�
       OfflineDevice_t devices[MAX_OFFLINE_DEVICES]; // 设备数组
       uint8_t device_count;                         // 设备数量
       osal_mutex_t mutex;                           // 互斥锁
+      bool initialized;                             // 初始化状态
+      uint8_t* current_beep_times_ptr;              // 当前蜂鸣次数指针
   } OfflineManager_t;
   ```
   
@@ -96,41 +98,42 @@ OFFLINE 离线检测模块是一个基于 OSAL（操作系统抽象层）的设�
 ## API 接口
 
 ```c
-void offline_init(void);
+osal_status_t offline_module_init(OfflineManager_t* manager, uint8_t* beep_times);
 ```
 
 ```c
-void offline_task_function();
+uint8_t offline_module_device_register(const OfflineDeviceInit_t* init);
 ```
 
 ```c
-uint8_t offline_device_register(const OfflineDeviceInit_t* init);
+void offline_module_device_update(uint8_t device_index);
 ```
 
 ```c
-void offline_device_update(uint8_t device_index);
+void offline_module_device_enable(uint8_t device_index);
 ```
 
 ```c
-void offline_device_enable(uint8_t device_index);
+void offline_module_device_disable(uint8_t device_index);
 ```
 
 ```c
-void offline_device_disable(uint8_t device_index);
+uint8_t offline_module_get_device_status(uint8_t device_index);
 ```
 
 ```c
-uint8_t get_device_status(uint8_t device_index);
+uint8_t offline_module_get_system_status(void);
 ```
 
 ```c
-uint8_t get_system_status(void);
+void offline_module_register_shell_cmd(OfflineManager_t* manager);
 ```
 
 ## Shell 命令
 
 ```c
 模块提供了一个Shell命令接口，用于查看设备离线状态信息：
+offline help     # 显示帮助信息
 offline list     # 列出所有注册设备及其状态
 offline status   # 显示系统整体离线状态
 ```
@@ -138,7 +141,18 @@ offline status   # 显示系统整体离线状态
 ## 使用示例
 
 ```c
-offline_init();
+// 定义离线管理器和蜂鸣次数变量
+static OfflineManager_t offline_manager;
+static uint8_t current_beep_times;
+
+// 初始化离线模块
+memset(&offline_manager, 0, sizeof(offline_manager));
+osal_mutex_create(&offline_manager.mutex, "offline_manager_mutex");
+offline_module_init(&offline_manager, &current_beep_times);
+
+// 注册shell命令
+offline_module_register_shell_cmd(&offline_manager);
+
 // 定义设备初始化配置
 OfflineDeviceInit_t gimbal_init = {
     .name = "Gimbal Motor",
@@ -149,31 +163,31 @@ OfflineDeviceInit_t gimbal_init = {
 };
 
 // 注册设备
-uint8_t gimbal_index = offline_device_register(&gimbal_init);
+uint8_t gimbal_index = offline_module_device_register(&gimbal_init);
 if (gimbal_index == OFFLINE_INVALID_INDEX) {
     // 注册失败处理
     return;
 }
 
 // 在设备通信正常时定期调用此函数更新设备状态
-offline_device_update(gimbal_index);
+offline_module_device_update(gimbal_index);
 
 // 检查特定设备状态
-if (get_device_status(gimbal_index) == STATE_OFFLINE) {
+if (offline_module_get_device_status(gimbal_index) == STATE_OFFLINE) {
     // 设备离线处理
 }
 
 // 检查系统整体状态
-uint8_t system_status = get_system_status();
+uint8_t system_status = offline_module_get_system_status();
 if (system_status != 0) {
     // 系统中有设备离线
 }
 
 // 临时禁用设备检测
-offline_device_disable(gimbal_index);
+offline_module_device_disable(gimbal_index);
 
 // 重新启用设备检测
-offline_device_enable(gimbal_index);
+offline_module_device_enable(gimbal_index);
 ```
 
 ## 工作原理
