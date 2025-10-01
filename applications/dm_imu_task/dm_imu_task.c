@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-16 12:17:58
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-10-01 20:23:02
+ * @LastEditTime: 2025-10-01 23:21:28
  * @FilePath: /rm_base/applications/dm_imu_task/dm_imu_task.c
  * @Description: 
  */
@@ -43,6 +43,7 @@ void dm_imu_task_init(void)
 {
     memset(&dm_imu_module,0,sizeof(DM_IMU_Moudule_t));
     dm_imu_init(&dm_imu_module);
+    dm_imu_shell_cmd_init(&dm_imu_module);
     
     osal_status_t status = osal_thread_create(&dm_imu_thread, "dm_imu_thread", dm_imu_task, 0, 
                        dm_imu_thread_stack,DM_IMU_THREAD_STACK_SIZE, DM_IMU_THREAD_PRIORITY);

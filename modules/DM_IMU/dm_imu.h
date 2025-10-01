@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-16 10:10:48
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-10-01 20:21:44
+ * @LastEditTime: 2025-10-01 23:19:13
  * @FilePath: /rm_base/modules/DM_IMU/dm_imu.h
  * @Description: 
  */
@@ -56,5 +56,11 @@ void dm_imu_update();
  * @return {DM_IMU_DATA_t*}
  */
 DM_IMU_DATA_t* get_dm_imu_data(void);
+/**
+ * @description: dm_imu模块shell命令初始化
+ * @param {DM_IMU_Moudule_t*} module, dm_imu模块指针
+ * @return {void}
+ */
+void dm_imu_shell_cmd_init(DM_IMU_Moudule_t* module);
 
 #endif // _DM_IMU_H_
