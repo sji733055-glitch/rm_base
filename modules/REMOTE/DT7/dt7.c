@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-15 09:29:57
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-30 14:46:17
+ * @LastEditTime: 2025-10-01 22:15:43
  * @FilePath: /rm_base/modules/REMOTE/DT7/dt7.c
  * @Description: 
  */
@@ -44,7 +44,7 @@ osal_status_t dt7_init(DT7_Instance_t *dt7_instance){
 
     // 初始化sbus实例
     OfflineDeviceInit_t offline_init = {
-        .name = "sbus",
+        .name = "dt7",
         .timeout_ms = 50,
         .level = OFFLINE_LEVEL_HIGH,
         .beep_times = 0,
