@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-15 09:18:31
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-26 23:05:49
+ * @LastEditTime: 2025-10-01 19:13:05
  * @FilePath: /rm_base/modules/REMOTE/remote.c
  * @Description: 
  */
@@ -12,46 +12,49 @@
 #include <stdint.h>
 #include <string.h>
 
-#ifdef REMOTE_MODULE
-
 #define log_tag "remote"
 #include "shell_log.h"
 
-static remote_instance_t remote_instance;
+static remote_instance_t *remote_instance = NULL;
 
-
-osal_status_t remote_init(void)
+osal_status_t remote_init(remote_instance_t *remote)
 {
-    memset(&remote_instance, 0, sizeof(remote_instance_t));
+    if (remote_instance == NULL)
+    {
+        return OSAL_ERROR;
+    }
+
+    remote_instance = remote;
+
     osal_status_t ret = OSAL_SUCCESS;
 
 #if defined(REMOTE_SOURCE)  && REMOTE_SOURCE == 1
-    ret = sbus_init(&remote_instance.sbus_instance);
+    ret = sbus_init(&remote_instance->sbus_instance);
     if (ret == OSAL_SUCCESS) {
-        remote_instance.remote_offline_index = remote_instance.sbus_instance.offline_index;
+        remote_instance->remote_offline_index = remote_instance->sbus_instance.offline_index;
     } else {
         ret = OSAL_ERROR;
     }
 #elif defined(REMOTE_SOURCE)  && REMOTE_SOURCE == 2
-    ret = dt7_init(&remote_instance.dt7_instance);
+    ret = dt7_init(&remote_instance->dt7_instance);
     if (ret == OSAL_SUCCESS) {
-        remote_instance.remote_offline_index = remote_instance.dt7_instance.offline_index;
+        remote_instance->remote_offline_index = remote_instance->dt7_instance.offline_index;
     } else {
         ret = OSAL_ERROR;
     }
 #endif
 
 #if defined(REMOTE_VT_SOURCE) && REMOTE_VT_SOURCE == 1
-    ret = vt02_init(&remote_instance.vt02_instance);
+    ret = vt02_init(&remote_instance->vt02_instance);
     if (ret == OSAL_SUCCESS) {
-        remote_instance.vt_offline_index = remote_instance.vt02_instance.offline_index;
+        remote_instance->vt_offline_index = remote_instance->vt02_instance.offline_index;
     } else {
         ret = OSAL_ERROR;
     }
 #elif defined(REMOTE_VT_SOURCE) && REMOTE_VT_SOURCE == 2
-    ret = vt03_init(&remote_instance.vt03_instance);
+    ret = vt03_init(&remote_instance->vt03_instance);
     if (ret == OSAL_SUCCESS) {
-        remote_instance.vt_offline_index = remote_instance.vt03_instance.offline_index;
+        remote_instance->vt_offline_index = remote_instance->vt03_instance.offline_index;
     } else {
         ret = OSAL_ERROR;
     }
@@ -59,60 +62,13 @@ osal_status_t remote_init(void)
 
     if (ret == OSAL_SUCCESS && REMOTE_SOURCE !=0 && REMOTE_VT_SOURCE !=0)
     {
-        remote_instance.initflag = 1;
+        remote_instance->initflag = 1;
         LOG_INFO("remote init success");
     }
     return ret;
 }
 
-void remote_task_function(void)
-{
-    // 根据遥控器类型读取数据
-#if defined(REMOTE_SOURCE) && REMOTE_SOURCE == 1
-    // SBUS遥控器数据读取
-    if (remote_instance.sbus_instance.uart_device != NULL) {
-        uint8_t *data = BSP_UART_Read(remote_instance.sbus_instance.uart_device);
-        if (data != NULL) {
-            sbus_decode(&remote_instance.sbus_instance, data);
-        }
-    }
-#elif defined(REMOTE_SOURCE) && REMOTE_SOURCE == 2
-    // DT7遥控器数据读取
-    if (remote_instance.dt7_instance.uart_device != NULL) {
-        uint8_t *data = BSP_UART_Read(remote_instance.dt7_instance.uart_device);
-        if (data != NULL) {
-            dt7_decode(&remote_instance.dt7_instance, data);
-        }
-    }
-#endif
-}
-
-
-void remote_vt_task_function(void)
-{ 
-    // 根据图传遥控器类型读取数据
-#if defined(REMOTE_VT_SOURCE) && REMOTE_VT_SOURCE == 1
-    // VT02图传遥控器数据读取
-    if (remote_instance.vt02_instance.uart_device != NULL) {
-        uint8_t *data = BSP_UART_Read(remote_instance.vt02_instance.uart_device);
-        if (data != NULL) {
-            vt02_decode(&remote_instance.vt02_instance, data);
-        }
-    }
-#elif defined(REMOTE_VT_SOURCE) && REMOTE_VT_SOURCE == 2
-    // VT03图传遥控器数据读取
-    if (remote_instance.vt03_instance.uart_device != NULL) {
-        uint8_t *data = BSP_UART_Read(remote_instance.vt03_instance.uart_device);
-        if (data != NULL) {
-            vt03_decode(&remote_instance.vt03_instance, data);
-        }
-    }
-#endif
-}
-
-
-
-uint8_t get_remote_channel_state(remote_instance_t *remote_instance, uint8_t channel_index, uint8_t is_vt_remote)
+uint8_t get_remote_channel_state(uint8_t channel_index, uint8_t is_vt_remote)
 {
     if (remote_instance == NULL || remote_instance->initflag !=1) {
         return channel_none;
@@ -148,7 +104,7 @@ uint8_t get_remote_channel_state(remote_instance_t *remote_instance, uint8_t cha
     }
 }
 
-mouse_state_t* get_remote_mouse_state(remote_instance_t *remote_instance, uint8_t is_vt_remote)
+mouse_state_t* get_remote_mouse_state(uint8_t is_vt_remote)
 {
     if (remote_instance == NULL  || remote_instance->initflag !=1) {
         return NULL;
@@ -171,7 +127,7 @@ mouse_state_t* get_remote_mouse_state(remote_instance_t *remote_instance, uint8_
     return NULL;
 }
 
-keyboard_state_t * get_remote_keyboard_state(remote_instance_t *remote_instance,uint8_t is_vt_remote)
+keyboard_state_t * get_remote_keyboard_state(uint8_t is_vt_remote)
 {
     if (remote_instance == NULL || remote_instance->initflag !=1) {
         return NULL;
@@ -193,25 +149,4 @@ keyboard_state_t * get_remote_keyboard_state(remote_instance_t *remote_instance,
 
     return NULL;
 }
-
-remote_instance_t* get_remote_instance(void)
-{
-    return &remote_instance;
-}
-#else  
-osal_status_t remote_init(void){return OSAL_SUCCESS;}
-uint8_t get_remote_channel_state(remote_instance_t *remote_instance, uint8_t channel_index, uint8_t is_vt_remote){
-    return channel_none;
-}
-mouse_state_t* get_remote_mouse(remote_instance_t *remote_instance, uint8_t is_vt_remote){
-    return NULL;
-}
-keyboard_state_t * get_remote_keyboard_state(remote_instance_t *remote_instance,uint8_t is_vt_remote){
-    return NULL;
-}
-void remote_task_function(void){}
-void remote_vt_task_function(void){}
-
-remote_instance_t* get_remote_instance(void){return NULL;}
-#endif
 

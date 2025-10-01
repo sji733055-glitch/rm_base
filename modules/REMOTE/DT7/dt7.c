@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-15 09:29:57
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-30 13:40:20
+ * @LastEditTime: 2025-09-30 14:46:17
  * @FilePath: /rm_base/modules/REMOTE/DT7/dt7.c
  * @Description: 
  */
@@ -36,7 +36,7 @@ osal_status_t dt7_init(DT7_Instance_t *dt7_instance){
     }
 
     // 重新初始化uart
-    REMOTE_UART.Init.BaudRate = 115200;
+    REMOTE_UART.Init.BaudRate = 100000;
     if (HAL_UART_Init(&REMOTE_UART)!= HAL_OK){
         LOG_ERROR("uart init error");
         return OSAL_ERROR;

@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-15 09:29:38
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-30 13:37:19
+ * @LastEditTime: 2025-10-01 19:02:52
  * @FilePath: /rm_base/modules/REMOTE/SBUS/sbus.c
  * @Description: 
  */
@@ -33,14 +33,14 @@ osal_status_t sbus_init(SBUS_Instance_t *sbus_instance){
     }
 
     // 重新初始化uart
-    REMOTE_UART.Init.BaudRate = 115200;
+    REMOTE_UART.Init.BaudRate = 100000;
     if (HAL_UART_Init(&REMOTE_UART)!= HAL_OK){
         LOG_ERROR("uart init error");
         return OSAL_ERROR;
     } 
 
     // 初始化sbus实例
-        OfflineDeviceInit_t offline_init = {
+    OfflineDeviceInit_t offline_init = {
         .name = "sbus",
         .timeout_ms = 50,
         .level = OFFLINE_LEVEL_HIGH,
