@@ -56,7 +56,7 @@ TX_BYTE_POOL tx_app_byte_pool;
 
 /* USER CODE BEGIN PV */
 static osal_thread_t robot_init_thread;
-static uint8_t robot_init_stack[1024];
+static uint8_t robot_init_stack[2048];
 void robot_init_entry(ULONG input);
 /* USER CODE END PV */
 
@@ -101,7 +101,7 @@ VOID tx_application_define(VOID *first_unused_memory)
 
     /* USER CODE BEGIN  App_ThreadX_Init_Success */
     osal_thread_create(&robot_init_thread, "robot_init_thread", robot_init_entry, 
-                      NULL, robot_init_stack,1024,1);
+                      NULL, robot_init_stack,2048,1);
     osal_thread_start(&robot_init_thread);
     /* USER CODE END  App_ThreadX_Init_Success */
 

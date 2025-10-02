@@ -1,5 +1,5 @@
 {
-    "cortex-debug.armToolchainPath": "/home/pan/complier/arm-gnu-toolchain/bin/",
+    "cortex-debug.armToolchainPath": "E:/arm-gnu-toolchain/arm-none-eabi/bin",
     "cortex-debug.JLinkGDBServerPath": "/opt/SEGGER/JLink/JLinkGDBServer",
     // 是否检查插件冲突
     "clangd.detectExtensionConflicts": true,
@@ -16,6 +16,6 @@
         "--function-arg-placeholders=false",
         // compelie_commands.json 文件的目录位置(相对于工作区，由于 CMake 生成的该文件默认在 build 文件夹中，故设置为 build)
         "--compile-commands-dir=build/Debug",
-        "--query-driver=/home/pan/complier/arm-gnu-toolchain/bin/arm-none-eabi-gcc"
+        "--query-driver=E:/arm-gnu-toolchain/arm-none-eabi/bin/arm-none-eabi-gcc.exe"
     ],
 }

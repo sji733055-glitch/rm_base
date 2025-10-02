@@ -2,8 +2,8 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-14 08:49:46
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-17 12:49:41
- * @FilePath: /rm_base/modules/INS/ins.h
+ * @LastEditTime: 2025-10-02 17:39:49
+ * @FilePath: \rm_base\modules\INS\ins.h
  * @Description: INS姿态解算模块
  */
 
@@ -52,7 +52,39 @@ typedef struct
 } INS_Param_t;
 
 // 函数声明
-void ins_init(void);
-void ins_task_function();
+/**
+ * @description: 初始化INS模块
+ * @param {INS_t} *ins,INS结构体指针
+ * @param {INS_Param_t} *param,安装参数结构体指针
+ * @return {*}
+ */
+void ins_init(INS_t *ins, INS_Param_t *param);
+/**
+ * @brief IMU参数修正，用于修正IMU安装误差与标度因数误差
+ * @param param IMU参数
+ * @param gyro  角速度
+ * @param accel 加速度
+ */
+void IMU_Param_Correction(INS_Param_t *param, float gyro[3], float accel[3]);
+/**
+ * @brief 使用加速度计的数据初始化Roll和Pitch,Yaw置0
+ * @param ins INS结构体指针
+ * @param init_q4 输出的初始四元数
+ */
+void InitQuaternion(INS_t *ins,float *init_q4);
+/**
+ * @brief 将三维向量从机体坐标系转换到地球坐标系
+ * @param vecBF 机体坐标系向量
+ * @param vecEF 地球坐标系向量
+ * @param q 四元数
+ */
+void BodyFrameToEarthFrame(const float *vecBF, float *vecEF, float *q);
+/**
+ * @brief 将三维向量从地球坐标系转换到机体坐标系
+ * @param vecEF 地球坐标系向量
+ * @param vecBF 机体坐标系向量
+ * @param q 四元数
+ */
+void EarthFrameToBodyFrame(const float *vecEF, float *vecBF, float *q);
 
 #endif // _INS_H_  

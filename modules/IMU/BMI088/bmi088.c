@@ -2,8 +2,8 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 13:43:09
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-26 23:03:41
- * @FilePath: /rm_base/modules/IMU/BMI088/bmi088.c
+ * @LastEditTime: 2025-10-02 19:27:52
+ * @FilePath: \rm_base\modules\IMU\BMI088\bmi088.c
  * @Description: 
  */
 #include "bmi088.h"

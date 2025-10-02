@@ -2,8 +2,8 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-13 10:14:45
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-10-01 20:36:57
- * @FilePath: /rm_base/applications/robot_init/robot_init.c
+ * @LastEditTime: 2025-10-02 15:59:03
+ * @FilePath: \rm_base\applications\robot_init\robot_init.c
  * @Description: 
  */
 #include "robot_init.h"
@@ -26,7 +26,6 @@ void bsp_init()
 void app_init(){
   shell_task_init();
   offline_task_init();
-  ins_init();
   ins_task_init();
   dm_imu_task_init();
   remote_task_init(); 

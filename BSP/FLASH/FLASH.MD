@@ -21,31 +21,30 @@ BSP FLASH 是一个基于 STM32 HAL 库的 FLASH 存储驱动程序，提供了�
   
   ```c
   typedef enum {
-      BSP_FLASH_OK       = 0x00U,           // 操作成功
-      BSP_FLASH_ERROR    = 0x01U,           // 操作失败
-      BSP_FLASH_BUSY     = 0x02U,           // FLASH忙
-      BSP_FLASH_TIMEOUT  = 0x03U,           // 操作超时
-      BSP_FLASH_INVALID_ADDRESS = 0x04U,    // 无效地址
-      BSP_FLASH_INVALID_SIZE    = 0x05U     // 无效大小
+      BSP_FLASH_OK = 0,
+      BSP_FLASH_ERROR,
+      BSP_FLASH_INVALID_ADDRESS,
+      BSP_FLASH_INVALID_SIZE
   } BSP_FLASH_Status;
   ```
   
   ### BSP_FLASH_Sector
   
   ```c
+  // STM32F4系列Flash扇区定义
   typedef enum {
-      BSP_FLASH_SECTOR_0  = 0x00U,  /*!< Sector Number 0   */
-      BSP_FLASH_SECTOR_1  = 0x01U,  /*!< Sector Number 1   */
-      BSP_FLASH_SECTOR_2  = 0x02U,  /*!< Sector Number 2   */
-      BSP_FLASH_SECTOR_3  = 0x03U,  /*!< Sector Number 3   */
-      BSP_FLASH_SECTOR_4  = 0x04U,  /*!< Sector Number 4   */
-      BSP_FLASH_SECTOR_5  = 0x05U,  /*!< Sector Number 5   */
-      BSP_FLASH_SECTOR_6  = 0x06U,  /*!< Sector Number 6   */
-      BSP_FLASH_SECTOR_7  = 0x07U,  /*!< Sector Number 7   */
-      BSP_FLASH_SECTOR_8  = 0x08U,  /*!< Sector Number 8   */
-      BSP_FLASH_SECTOR_9  = 0x09U,  /*!< Sector Number 9   */
-      BSP_FLASH_SECTOR_10 = 0x0AU,  /*!< Sector Number 10  */
-      BSP_FLASH_SECTOR_11 = 0x0BU   /*!< Sector Number 11  */
+      BSP_FLASH_SECTOR_0     = 0U,   // 0x08000000 - 0x08003FFF (16KB)
+      BSP_FLASH_SECTOR_1     = 1U,   // 0x08004000 - 0x08007FFF (16KB)
+      BSP_FLASH_SECTOR_2     = 2U,   // 0x08008000 - 0x0800BFFF (16KB)
+      BSP_FLASH_SECTOR_3     = 3U,   // 0x0800C000 - 0x0800FFFF (16KB)
+      BSP_FLASH_SECTOR_4     = 4U,   // 0x08010000 - 0x0801FFFF (64KB)
+      BSP_FLASH_SECTOR_5     = 5U,   // 0x08020000 - 0x0803FFFF (128KB)
+      BSP_FLASH_SECTOR_6     = 6U,   // 0x08040000 - 0x0805FFFF (128KB)
+      BSP_FLASH_SECTOR_7     = 7U,   // 0x08060000 - 0x0807FFFF (128KB)
+      BSP_FLASH_SECTOR_8     = 8U,   // 0x08080000 - 0x0809FFFF (128KB)
+      BSP_FLASH_SECTOR_9     = 9U,   // 0x080A0000 - 0x080BFFFF (128KB)
+      BSP_FLASH_SECTOR_10    = 10U,  // 0x080C0000 - 0x080DFFFF (128KB)
+      BSP_FLASH_SECTOR_11    = 11U   // 0x080E0000 - 0x080FFFFF (128KB)
   } BSP_FLASH_Sector;
   ```
   
@@ -56,31 +55,7 @@ BSP FLASH 是一个基于 STM32 HAL 库的 FLASH 存储驱动程序，提供了�
   ```
   
   ```c
-  BSP_FLASH_Status BSP_FLASH_Write_Word(uint32_t address, uint32_t data);
-  ```
-  
-  ```c
-  BSP_FLASH_Status BSP_FLASH_Write_HalfWord(uint32_t address, uint16_t data);
-  ```
-  
-  ```c
-  BSP_FLASH_Status BSP_FLASH_Write_Byte(uint32_t address, uint8_t data);
-  ```
-  
-  ```c
   BSP_FLASH_Status BSP_FLASH_Write_Buffer(uint32_t address, uint8_t* data, uint32_t size);
-  ```
-  
-  ```c
-  BSP_FLASH_Status BSP_FLASH_Read_Word(uint32_t address, uint32_t* data);
-  ```
-  
-  ```c
-  BSP_FLASH_Status BSP_FLASH_Read_HalfWord(uint32_t address, uint16_t* data);
-  ```
-  
-  ```c
-  BSP_FLASH_Status BSP_FLASH_Read_Byte(uint32_t address, uint8_t* data);
   ```
   
   ```c
@@ -93,100 +68,6 @@ BSP FLASH 是一个基于 STM32 HAL 库的 FLASH 存储驱动程序，提供了�
   
   ```c
   uint8_t BSP_FLASH_Is_Address_Valid(uint32_t address);
-  ```
-  
-  ## 使用示例
-  
-  ```c
-  #include "bsp_flash.h"
-  
-  void flash_basic_operations_example(void)
-  {
-      BSP_FLASH_Status status;
-      uint32_t data_word;
-      uint16_t data_halfword;
-      uint8_t data_byte;
-      uint8_t buffer[100];
-      
-      // 1. 擦除扇区5
-      status = BSP_FLASH_Erase_Sector(BSP_FLASH_SECTOR_5);
-      if (status != BSP_FLASH_OK) {
-          printf("Erase sector failed: %d\r\n", status);
-          return;
-      }
-      
-      // 2. 写入32位数据
-      status = BSP_FLASH_Write_Word(0x08020000, 0x12345678);
-      if (status != BSP_FLASH_OK) {
-          printf("Write word failed: %d\r\n", status);
-          return;
-      }
-      
-      // 3. 读取32位数据
-      status = BSP_FLASH_Read_Word(0x08020000, &data_word);
-      if (status != BSP_FLASH_OK) {
-          printf("Read word failed: %d\r\n", status);
-          return;
-      }
-      printf("Read data: 0x%08X\r\n", data_word);
-      
-      // 4. 写入半字数据
-      status = BSP_FLASH_Write_HalfWord(0x08020004, 0xABCD);
-      if (status != BSP_FLASH_OK) {
-          printf("Write halfword failed: %d\r\n", status);
-          return;
-      }
-      
-      // 5. 读取半字数据
-      status = BSP_FLASH_Read_HalfWord(0x08020004, &data_halfword);
-      if (status != BSP_FLASH_OK) {
-          printf("Read halfword failed: %d\r\n", status);
-          return;
-      }
-      printf("Read data: 0x%04X\r\n", data_halfword);
-      
-      // 6. 写入字节数据
-      status = BSP_FLASH_Write_Byte(0x08020006, 0xEF);
-      if (status != BSP_FLASH_OK) {
-          printf("Write byte failed: %d\r\n", status);
-          return;
-      }
-      
-      // 7. 读取字节数据
-      status = BSP_FLASH_Read_Byte(0x08020006, &data_byte);
-      if (status != BSP_FLASH_OK) {
-          printf("Read byte failed: %d\r\n", status);
-          return;
-      }
-      printf("Read data: 0x%02X\r\n", data_byte);
-      
-      // 8. 写入数据块
-      for (int i = 0; i < sizeof(buffer); i++) {
-          buffer[i] = i;
-      }
-      status = BSP_FLASH_Write_Buffer(0x08020100, buffer, sizeof(buffer));
-      if (status != BSP_FLASH_OK) {
-          printf("Write buffer failed: %d\r\n", status);
-          return;
-      }
-      
-      // 9. 读取数据块
-      memset(buffer, 0, sizeof(buffer));
-      status = BSP_FLASH_Read_Buffer(0x08020100, buffer, sizeof(buffer));
-      if (status != BSP_FLASH_OK) {
-          printf("Read buffer failed: %d\r\n", status);
-          return;
-      }
-      
-      // 10. 验证数据
-      for (int i = 0; i < sizeof(buffer); i++) {
-          if (buffer[i] != i) {
-              printf("Data verification failed at index %d\r\n", i);
-              return;
-          }
-      }
-      printf("Data verification passed\r\n");
-  }
   ```
   
   ### FLASH配置参数存储
