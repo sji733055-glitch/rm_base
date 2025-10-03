@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-09 17:03:48
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-10-03 10:09:35
+ * @LastEditTime: 2025-10-03 10:13:21
  * @FilePath: \rm_base\BSP\CAN\bsp_can.c
  * @Description: 
  */
@@ -25,7 +25,7 @@ static osal_event_t global_can_event;
 // CAN总线管理器数组
 static CANBusManager can_bus_managers[CAN_BUS_NUM];
 // 静态声明32个事件标志
-static uint32_t can_device_event_flags[32] = {
+const static uint32_t can_device_event_flags[32] = {
     0x00000001, 0x00000002, 0x00000004, 0x00000008,
     0x00000010, 0x00000020, 0x00000040, 0x00000080,
     0x00000100, 0x00000200, 0x00000400, 0x00000800,
