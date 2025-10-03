@@ -2,8 +2,8 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 10:28:00
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-10-01 19:03:36
- * @FilePath: /rm_base/CONFIG/modules_config.h
+ * @LastEditTime: 2025-10-03 10:24:39
+ * @FilePath: \rm_base\CONFIG\modules_config.h
  * @Description: 
  */
 #ifndef _MODULES_CONFIG_H_
@@ -50,5 +50,7 @@
 /* 电机模块 */
 /* DJI电机模块 */
 #define DJI_MOTOR_CNT                     8                                     //DJI电机数量
+/* 达妙电机模块 */
+#define DM_MOTOR_CNT	                     4                                     //达妙电机数量
 
 #endif // _MODULES_CONFIG_H_

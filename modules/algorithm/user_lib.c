@@ -371,3 +371,26 @@ float IntegerToCurrent(float I_min,float I_max,int16_t V_min,int16_t V_max,int16
     }
     return I;
 }
+
+
+/**
+ * @brief 将弧度转换为角度
+ * 
+ * @param rad 弧度值
+ * @return float 转换后的角度值
+ */
+float rad_to_deg(float rad)
+{
+    return rad * (180.0f / PI);
+}
+
+/**
+ * @brief 将角度转换为弧度
+ * 
+ * @param deg 角度值
+ * @return float 转换后的弧度值
+ */
+float deg_to_rad(float deg)
+{
+    return deg * (PI / 180.0f);
+}
