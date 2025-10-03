@@ -2,8 +2,8 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-09 17:03:48
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-09-30 14:41:19
- * @FilePath: /rm_base/BSP/CAN/bsp_can.c
+ * @LastEditTime: 2025-10-03 10:09:35
+ * @FilePath: \rm_base\BSP\CAN\bsp_can.c
  * @Description: 
  */
 
@@ -187,6 +187,8 @@ Can_Device* BSP_CAN_Device_Init(Can_Device_Init_Config_s *config)
     if (config->rx_mode == CAN_MODE_IT) {
         HAL_CAN_ActivateNotification(config->can_handle, CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_RX_FIFO1_MSG_PENDING);
     }
+    // 启动CAN总线
+    HAL_CAN_Start(device->can_handle);
     
     return device;
 }
