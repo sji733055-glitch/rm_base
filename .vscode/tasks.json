@@ -38,10 +38,10 @@
         {
             "label": "JFlash Program",
             "type": "shell",
-            "command": "JFlash",
+            "command": "C:/Program Files/SEGGER/JLink_V854/JFlash.exe",  // 修改为安装JFlash的路径
             "args": [
                 "-openprj", 
-                "${workspaceFolder}/base.jflash",
+                "${workspaceFolder}/rm_base.jflash",
                 "-open",                
                 "${workspaceFolder}/build/Debug/rm_base.elf",
                 "-auto",
