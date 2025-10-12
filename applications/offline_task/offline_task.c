@@ -15,6 +15,7 @@
 #include <stdint.h>
 #include <string.h>
 #include "offline_task.h"
+#include "bsp_dwt.h"
 
 #ifdef OFFLINE_MODULE
 
@@ -44,9 +45,9 @@ void offline_task(ULONG thread_input)
         #endif
 
         if (offline_manager.initialized == true){
-            static uint8_t highest_error_level = 0;
-            static uint8_t alarm_device_index = OFFLINE_INVALID_INDEX;
-            uint32_t current_time = tx_time_get();
+            uint8_t highest_error_level = 0;
+            uint8_t alarm_device_index = OFFLINE_INVALID_INDEX;
+            uint32_t current_time = (uint32_t)DWT_GetTimeline_ms();
                     
             // 重置错误状态
             highest_error_level = 0;
