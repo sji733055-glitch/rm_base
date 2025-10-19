@@ -11,6 +11,7 @@ add_library(${name} STATIC
     FLASH/bsp_flash.c
     ADC/bsp_adc.c
     CAN/bsp_can.c
+    USB/cdc_acm.c
 )
 
 # 设置包含目录
@@ -26,6 +27,7 @@ target_include_directories(${name}
     ${CMAKE_CURRENT_SOURCE_DIR}/FLASH
     ${CMAKE_CURRENT_SOURCE_DIR}/ADC
     ${CMAKE_CURRENT_SOURCE_DIR}/CAN
+    ${CMAKE_CURRENT_SOURCE_DIR}/USB
     
 )
 

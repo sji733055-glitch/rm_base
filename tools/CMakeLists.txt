@@ -10,6 +10,10 @@ add_library(${name} STATIC
     SHELL/shell.c
     SHELL/shell_ps.c
     SHELL/LOG/shell_log.c
+    CherryUSB/core/usbd_core.c 
+    CherryUSB/class/cdc/usbd_cdc_acm.c 
+    CherryUSB/port/dwc2/usb_dc_dwc2.c 
+    CherryUSB/port/dwc2/usb_glue_st.c
 )
 
 # 设置包含目录
@@ -18,6 +22,11 @@ target_include_directories(${name}
     ${CMAKE_CURRENT_SOURCE_DIR}/RTT
     ${CMAKE_CURRENT_SOURCE_DIR}/SHELL
     ${CMAKE_CURRENT_SOURCE_DIR}/SHELL/LOG
+    ${CMAKE_CURRENT_SOURCE_DIR}/CherryUSB/core
+    ${CMAKE_CURRENT_SOURCE_DIR}/CherryUSB/class/cdc
+    ${CMAKE_CURRENT_SOURCE_DIR}/CherryUSB/common 
+    ${CMAKE_CURRENT_SOURCE_DIR}/CherryUSB/port/dwc2 
+    ${CMAKE_CURRENT_SOURCE_DIR}/CherryUSB/class/hub
 )
 
 # 链接必要的库

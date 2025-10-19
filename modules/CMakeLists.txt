@@ -31,6 +31,7 @@ add_library(${name} STATIC
     MOTOR/DAMIAO/damiao.c
     MOTOR/BENMO/benmo.c
     ITC/itc.c
+    USB/usb_user.c
 )
 
 # 设置包含目录
@@ -56,6 +57,7 @@ target_include_directories(${name}
     ${CMAKE_CURRENT_SOURCE_DIR}/MOTOR/DAMIAO
     ${CMAKE_CURRENT_SOURCE_DIR}/MOTOR/BENMO
     ${CMAKE_CURRENT_SOURCE_DIR}/ITC
+    ${CMAKE_CURRENT_SOURCE_DIR}/USB
 )
 
 # 链接必要的库

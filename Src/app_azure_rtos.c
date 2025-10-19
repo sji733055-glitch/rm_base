@@ -52,7 +52,7 @@
 /* USER CODE BEGIN TX_Pool_Buffer */
 /* USER CODE END TX_Pool_Buffer */
 static UCHAR tx_byte_pool_buffer[TX_APP_MEM_POOL_SIZE];
-TX_BYTE_POOL tx_app_byte_pool;
+static TX_BYTE_POOL tx_app_byte_pool;
 
 /* USER CODE BEGIN PV */
 static osal_thread_t robot_init_thread;
@@ -108,10 +108,14 @@ VOID tx_application_define(VOID *first_unused_memory)
   }
 
 }
+
 /* USER CODE BEGIN  0 */
 void robot_init_entry(ULONG input)
 {
+  osal_critical_state_t cs;
+  osal_enter_critical(&cs);
   robot_init();
+  osal_exit_critical(&cs);
   LOG_INFO("robot init finish");
   osal_thread_delete(&robot_init_thread);
 }
