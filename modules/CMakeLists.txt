@@ -32,6 +32,7 @@ add_library(${name} STATIC
     MOTOR/BENMO/benmo.c
     ITC/itc.c
     USB/usb_user.c
+    board_comm/board_comm.c
 )
 
 # 设置包含目录
@@ -58,6 +59,7 @@ target_include_directories(${name}
     ${CMAKE_CURRENT_SOURCE_DIR}/MOTOR/BENMO
     ${CMAKE_CURRENT_SOURCE_DIR}/ITC
     ${CMAKE_CURRENT_SOURCE_DIR}/USB
+    ${CMAKE_CURRENT_SOURCE_DIR}/board_comm
 )
 
 # 链接必要的库

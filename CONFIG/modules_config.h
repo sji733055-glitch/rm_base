@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-11 10:28:00
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-10-03 18:30:52
+ * @LastEditTime: 2025-10-20 22:25:13
  * @FilePath: \rm_base\CONFIG\modules_config.h
  * @Description: 
  */
@@ -54,5 +54,7 @@
 #define DM_MOTOR_CNT	                     4                                     //达妙电机数量
 /* 本末电机模块 */
 #define BENMO_MOTOR_CNT                   4                                     //本末电机数量
-
+/* 板间通信模块 */
+#define GIMBAL_ID                         0X310                                 // 云台板ID
+#define CHASSIS_ID                        0X311                                 // 底盘板ID
 #endif // _MODULES_CONFIG_H_

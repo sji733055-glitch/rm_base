@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-13 10:14:45
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-10-19 10:48:45
+ * @LastEditTime: 2025-10-20 22:03:20
  * @FilePath: \rm_base\applications\robot_init\robot_init.c
  * @Description: 
  */
@@ -17,9 +17,8 @@
 #include "ins_task.h"
 #include "shell_task.h"
 #include "gpio.h"
-#include "usb_user.h"
 
-static user_cdc_t user_cdc;
+
 
 void base_init()
 {
@@ -48,5 +47,4 @@ void robot_init()
 {
   base_init();
   app_init();
-  usb_user_init(&user_cdc);
 }

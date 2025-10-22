@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-10-19 22:54:19
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-10-19 22:58:52
+ * @LastEditTime: 2025-10-22 23:51:20
  * @FilePath: \rm_base\CONFIG\robot_def.h
  * @Description: 
  */
@@ -27,16 +27,10 @@ typedef enum
 typedef struct
 {   
     float big_yaw;
-    float small_yaw;//针对哨兵大小yaw
+    float small_yaw;
     float pitch;
     gimbal_mode_e gimbal_mode;
 } Gimbal_Ctrl_Cmd_s;
-
-typedef struct
-{
-    float yaw_motor_single_round_angle;
-} Gimbal_Upload_Data_s;
-
 
 // 发射模式设置
 typedef enum
@@ -65,10 +59,6 @@ typedef struct
 } Shoot_Ctrl_Cmd_s;
 
 // 底盘模式设置
-/**
- * @brief 后续考虑修改为云台跟随底盘,而不是让底盘去追云台,云台的惯量比底盘小.
- *
- */
 typedef enum
 {
     CHASSIS_ZERO_FORCE = 0,    // 电流零输入
@@ -85,20 +75,22 @@ typedef struct
     float vy;           // 横移方向速度
     float wz;           // 旋转速度
     float offset_angle; // 底盘和归中位置的夹角
-    chassis_mode_e chassis_mode;
+    chassis_mode_e chassis_mode;    // 底盘模式
+    uint8_t ui_flag_1;    // UI控制标志位
+    uint8_t ui_flag_2;    // UI控制标志位
 } Chassis_Ctrl_Cmd_s;
 
 typedef struct
 {
-    uint8_t Robot_Color;
-    uint16_t projectile_allowance_17mm;  //剩余发弹量
-    uint8_t power_management_shooter_output; // 功率管理 shooter 输出
-    uint16_t current_hp_percent; // 机器人当前血量百分比
-    uint16_t outpost_HP;     //前哨站血量
-    uint16_t base_HP;        //基地血量
-    uint8_t game_progess;
-    uint16_t game_time;
-} Chassis_referee_Upload_Data_s;
+    uint8_t reversed_1;
+    uint8_t reversed_2;
+    uint8_t reversed_3;
+    uint8_t reversed_4;
+    uint8_t reversed_5;
+    uint8_t reversed_6;
+    uint8_t reversed_7;
+    uint8_t reversed_8;
+} Chassis_Upload_Data_s;
 
 #pragma pack()
 
