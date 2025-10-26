@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-17 10:52:48
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-10-07 20:42:32
+ * @LastEditTime: 2025-10-26 11:46:43
  * @FilePath: \rm_base\CONFIG\robot_config.h
  * @Description: 
  */
@@ -84,7 +84,7 @@
 
 #define YAW_CHASSIS_ALIGN_ECD                4088       // 云台和底盘对齐指向相同方向时的电机编码器值,若对云台有机械改动需要修改
 #define YAW_ECD_GREATER_THAN_4096            0          // ALIGN_ECD值是否大于4096,是为1,否为0;用于计算云台偏转角度
-#define YAW_ALIGN_ANGLE                      (YAW_CHASSIS_ALIGN_ECD * ECD_ANGLE_COEF_DJI)  // 对齐时的角度,0-360
+#define YAW_ALIGN_ANGLE                      (YAW_CHASSIS_ALIGN_ECD * 0.043945f)  // 对齐时的角度,0-360，0.043945f = (360/8192),将编码器值转化为角度制，这里指dji电机，其他电机根据手册修改
 // 发射参数
 #define REDUCTION_RATIO_LOADER               36.0f // 2006拨盘电机的减速比,英雄需要修改为3508的19.0f
 #define ONE_BULLET_DELTA_ANGLE               60.0f   // 发射一发弹丸拨盘转动的距离,由机械设计图纸给出

@@ -41,5 +41,8 @@
 #define MOTOR_DECODE_THREAD_STACK_SIZE 1024                                   // motor_decode线程栈大小
 #define MOTOR_DECODE_THREAD_STACK_SECTION __attribute__((section(".ccmram"))) // 线程栈内存区域
 #define MOTOR_DECODE_THREAD_PRIORITY   5                                      // motor_decode线程优先级
-
+/* robot_control 线程配置 */
+#define ROBOT_CONTROL_THREAD_STACK_SIZE 1024                                   // robot_control线程栈大小
+#define ROBOT_CONTROL_THREAD_STACK_SECTION __attribute__((section(".ccmram"))) // 线程栈内存区域
+#define ROBOT_CONTROL_THREAD_PRIORITY   15                                     // robot_control线程优先级
 #endif // _APP_CONFIG_H_
