@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-17 10:52:48
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-10-26 12:56:14
+ * @LastEditTime: 2025-10-30 19:54:59
  * @FilePath: \rm_base\CONFIG\robot_config.h
  * @Description: 
  */
@@ -75,9 +75,7 @@
 */
 
 /* 机器人关键参数定义 ,(这里参数根据机器人实际自行定义) */  //1 表示开启 0 表示关闭
-#define SMALL_YAW_ALIGN_ANGLE                0.0f
-#define SMALL_YAW_MIN_ANGLE                  -90.0f
-#define SMALL_YAW_MAX_ANGLE                  90.0f
+#define SMALL_YAW_ALIGN_ANGLE                (0 * 0.043945f)       // 小云台位于限制中心时，编码器值,若对云台有机械改动需要修改
 #define SMALL_YAW_PITCH_HORIZON_ANGLE        0.0f       // 云台处于水平位置时编码器值,若对云台有机械改动需要修改
 #define SMALL_YAW_PITCH_MAX_ANGLE            20.0f      // 云台竖直方向最大角度 (注意反馈如果是陀螺仪，则填写陀螺仪的角度)
 #define SMALL_YAW_PITCH_MIN_ANGLE            -25.0f     // 云台竖直方向最小角度 (注意反馈如果是陀螺仪，则填写陀螺仪的角度)

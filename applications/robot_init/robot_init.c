@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-13 10:14:45
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-10-27 00:09:29
+ * @LastEditTime: 2025-10-30 20:21:28
  * @FilePath: \rm_base\applications\robot_init\robot_init.c
  * @Description: 
  */
@@ -18,7 +18,7 @@
 #include "robot_control_task.h"
 #include "shell_task.h"
 #include "gpio.h"
-
+#include "gimbal_task.h"
 
 
 void base_init()
@@ -42,6 +42,7 @@ void app_init(){
   remote_task_init(); 
   motor_task_init();
   robot_control_task_init();
+  gimbal_task_init();
 }
 
 

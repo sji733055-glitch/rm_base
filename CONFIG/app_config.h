@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-14 12:51:31
  * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-10-04 12:51:37
+ * @LastEditTime: 2025-10-28 20:34:03
  * @FilePath: \rm_base\CONFIG\app_config.h
  * @Description: 
  */
@@ -45,4 +45,9 @@
 #define ROBOT_CONTROL_THREAD_STACK_SIZE 1024                                   // robot_control线程栈大小
 #define ROBOT_CONTROL_THREAD_STACK_SECTION __attribute__((section(".ccmram"))) // 线程栈内存区域
 #define ROBOT_CONTROL_THREAD_PRIORITY   15                                     // robot_control线程优先级
+/* gimbal 线程配置 */
+#define GIMBAL_THREAD_STACK_SIZE       1024                                   // gimbal线程栈大小
+#define GIMBAL_THREAD_STACK_SECTION    __attribute__((section(".ccmram")))    // 线程栈内存区域
+#define GIMBAL_THREAD_PRIORITY         13                                     // gimbal线程优先级
+
 #endif // _APP_CONFIG_H_
