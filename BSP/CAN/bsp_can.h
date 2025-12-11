@@ -102,5 +102,16 @@ osal_status_t BSP_CAN_ReadSingleDevice(Can_Device *device, osal_tick_t timeout);
  */
 uint32_t BSP_CAN_ReadMultipleDevice(Can_Device **devices, uint8_t device_count,
                                     osal_tick_t timeout);
+/**
+ * @description: 临时接收CAN消息（阻塞式，用于功能性命令）
+ * @param {CAN_HandleTypeDef*} hcan - CAN句柄
+ * @param {uint32_t} rx_id - 期望接收的ID
+ * @param {uint8_t*} rx_buff - 接收缓冲区
+ * @param {uint8_t*} rx_len - 接收长度（输出参数）
+ * @param {osal_tick_t} timeout - 超时时间
+ * @return {osal_status_t}，osal_success表示成功
+ */
+osal_status_t BSP_CAN_ReceiveOnce(CAN_HandleTypeDef *hcan, uint32_t rx_id, uint8_t *rx_buff,
+                                  uint8_t *rx_len, osal_tick_t timeout);
 
 #endif // _BSP_CAN_H_
