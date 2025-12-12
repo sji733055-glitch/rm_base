@@ -1,9 +1,9 @@
 /*
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-15 23:49:44
- * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-10-01 21:08:38
- * @FilePath: /rm_base/applications/remote_task/remote_task.c
+ * @LastEditors: Mas sji733055@gmail.com
+ * @LastEditTime: 2025-12-12 18:57:29
+ * @FilePath: /rm_base_demo/applications/remote_task/remote_task.c
  * @Description:
  */
 #include "remote_task.h"
@@ -83,6 +83,7 @@ void remote_vt_task(ULONG thread_input)
             }
         }
 #endif
+        osal_delay_ms(2);
     }
 }
 
