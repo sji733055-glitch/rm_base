@@ -2,7 +2,7 @@
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-10-26 15:51:20
  * @LastEditors: laladuduqq 17503181697@163.com
- * @LastEditTime: 2025-11-17 12:04:44
+ * @LastEditTime: 2025-12-04 16:32:28
  * @FilePath: /rm_base/applications/robot_control_task/robot_control_fun.c
  * @Description:
  */
@@ -335,7 +335,13 @@ void RemoteControlSet(Chassis_Ctrl_Cmd_s *Chassis_Ctrl, Shoot_Ctrl_Cmd_s *Shoot_
             Shoot_Ctrl->shoot_mode     = SHOOT_OFF;
             Shoot_Ctrl->friction_mode  = FRICTION_OFF;
             Shoot_Ctrl->load_mode      = LOAD_STOP;
-            memset(Chassis_Ctrl, 0, sizeof(Chassis_Ctrl_Cmd_s));
+            Chassis_Ctrl->vx = 0.0f;
+            Chassis_Ctrl->vy = 0.0f;
+            Chassis_Ctrl->wz = 0.0f;
+            Chassis_Ctrl->offset_angle = 0.0f;
+            Chassis_Ctrl->chassis_mode = CHASSIS_ZERO_FORCE;
+            Chassis_Ctrl->reserved_1 = 0;
+            Chassis_Ctrl->reserved_2 = 0;
         }
     }
 #endif

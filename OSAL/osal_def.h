@@ -408,6 +408,20 @@ void osal_delay_ms(unsigned int ms);
  */
 void osal_delay_us(unsigned int us);
 
+/**
+ * @description: 分配内存
+ * @param {size_t} size - 要分配的字节数
+ * @return {void*} 分配的内存指针，失败返回 NULL
+ */
+void *osal_malloc(size_t size);
+
+/**
+ * @description: 释放内存
+ * @param {void*} ptr - 要释放的内存指针
+ * @return {*}
+ */
+void osal_free(void *ptr);
+
 #ifdef __cplusplus
 }
 #endif

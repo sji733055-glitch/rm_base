@@ -1,13 +1,14 @@
 /*
  * @Author: laladuduqq 2807523947@qq.com
  * @Date: 2025-09-09 17:03:48
- * @LastEditors: laladuduqq 2807523947@qq.com
- * @LastEditTime: 2025-10-03 10:15:18
- * @FilePath: \rm_base\BSP\CAN\bsp_can.c
+ * @LastEditors: laladuduqq 17503181697@163.com
+ * @LastEditTime: 2025-12-11 11:03:05
+ * @FilePath: /rm_base/BSP/CAN/bsp_can.c
  * @Description:
  */
 
 #include "bsp_can.h"
+#include "bsp_dwt.h"
 #include "osal_def.h"
 #include <stdbool.h>
 #include <stdint.h>
@@ -33,33 +34,83 @@ const static uint32_t can_device_event_flags[32] = {
 static uint8_t can1_filter_idx = 0, can2_filter_idx = 14; // 0-13给can1用,14-27给can2用
 
 /**
- * @description: 添加CAN过滤器
- * @param {Can_Device*} device
- * @return {*}
+ * @description: 添加/移除CAN过滤器
+ * @param {CAN_HandleTypeDef*} hcan CAN句柄
+ * @param {uint32_t} rx_id 接收ID
+ * @param {bool} enable true-添加过滤器, false-移除过滤器
+ * @param {uint8_t*} filter_bank_out 输出过滤器索引(添加时)或输入过滤器索引(移除时)
+ * @return {bool} 成功返回true，失败返回false
  */
-static void CANAddFilter(Can_Device *device)
+static bool CANConfigFilter(CAN_HandleTypeDef *hcan, uint32_t rx_id, bool enable,
+                            uint8_t *filter_bank_out)
 {
     CAN_FilterTypeDef can_filter_conf;
+    uint8_t           filter_bank;
 
-    can_filter_conf.FilterMode =
-        CAN_FILTERMODE_IDLIST; // 使用id
-                               // list模式,即只有将rxid添加到过滤器中才会接收到,其他报文会被过滤
-    can_filter_conf.FilterScale = CAN_FILTERSCALE_16BIT; // 使用16位id模式,即只有低16位有效
-    can_filter_conf.FilterFIFOAssignment =
-        (device->rx_id & 1)
-            ? CAN_RX_FIFO0
-            : CAN_RX_FIFO1; // 奇数id的模块会被分配到FIFO0,偶数id的模块会被分配到FIFO1
-    can_filter_conf.SlaveStartFilterBank =
-        14; // 从第14个过滤器开始配置从机过滤器(在STM32的BxCAN控制器中CAN2是CAN1的从机)
-    can_filter_conf.FilterIdLow =
-        device->rx_id << 5; // 过滤器寄存器的低16位,因为使用STDID,所以只有低11位有效,高5位要填0
-    can_filter_conf.FilterBank =
-        device->can_handle == &hcan1
-            ? (can1_filter_idx++)
-            : (can2_filter_idx++); // 根据can_handle判断是CAN1还是CAN2,然后自增
-    can_filter_conf.FilterActivation = CAN_FILTER_ENABLE; // 启用过滤器
+    if (enable)
+    {
+        // 添加过滤器：分配新的filter_bank
+        if (hcan == &hcan1)
+        {
+            if (can1_filter_idx >= 14)
+                return false;
+            filter_bank = can1_filter_idx++;
+        }
+        else if (hcan == &hcan2)
+        {
+            if (can2_filter_idx >= 28)
+                return false;
+            filter_bank = can2_filter_idx++;
+        }
+        else
+        {
+            return false;
+        }
 
-    HAL_CAN_ConfigFilter(device->can_handle, &can_filter_conf);
+        can_filter_conf.FilterMode           = CAN_FILTERMODE_IDLIST;
+        can_filter_conf.FilterScale          = CAN_FILTERSCALE_16BIT;
+        can_filter_conf.FilterFIFOAssignment = (rx_id & 1) ? CAN_RX_FIFO0 : CAN_RX_FIFO1;
+        can_filter_conf.SlaveStartFilterBank = 14;
+        can_filter_conf.FilterIdLow          = rx_id << 5;
+        can_filter_conf.FilterIdHigh         = 0;
+        can_filter_conf.FilterMaskIdLow      = 0;
+        can_filter_conf.FilterMaskIdHigh     = 0;
+        can_filter_conf.FilterBank           = filter_bank;
+        can_filter_conf.FilterActivation     = CAN_FILTER_ENABLE;
+
+        if (HAL_CAN_ConfigFilter(hcan, &can_filter_conf) != HAL_OK)
+        {
+            // 失败时回退索引
+            if (hcan == &hcan1)
+                can1_filter_idx--;
+            else
+                can2_filter_idx--;
+            return false;
+        }
+
+        if (filter_bank_out)
+            *filter_bank_out = filter_bank;
+    }
+    else
+    {
+        // 移除过滤器：使用传入的filter_bank
+        if (!filter_bank_out)
+            return false;
+
+        filter_bank                      = *filter_bank_out;
+        can_filter_conf.FilterBank       = filter_bank;
+        can_filter_conf.FilterActivation = CAN_FILTER_DISABLE;
+
+        HAL_CAN_ConfigFilter(hcan, &can_filter_conf);
+
+        // 回退过滤器索引
+        if (hcan == &hcan1 && can1_filter_idx > 0)
+            can1_filter_idx--;
+        else if (hcan == &hcan2 && can2_filter_idx > 14)
+            can2_filter_idx--;
+    }
+
+    return true;
 }
 
 /**
@@ -197,7 +248,7 @@ Can_Device *BSP_CAN_Device_Init(Can_Device_Init_Config_s *config)
     }
 
     // 添加CAN过滤器
-    CANAddFilter(device);
+    CANConfigFilter(device->can_handle, device->rx_id, true, NULL);
 
     // 增加设备计数
     bus_manager->device_count++;
@@ -555,4 +606,65 @@ void HAL_CAN_TxMailbox2CompleteCallback(CAN_HandleTypeDef *hcan)
 {
     // 设置发送完成事件
     osal_event_set(&global_can_event, CAN_EVENT_TX_MAILBOX2_DONE);
+}
+
+osal_status_t BSP_CAN_ReceiveOnce(CAN_HandleTypeDef *hcan, uint32_t rx_id, uint8_t *rx_buff,
+                                  uint8_t *rx_len, osal_tick_t timeout)
+{
+    if (hcan == NULL || rx_buff == NULL || rx_len == NULL)
+    {
+        return OSAL_INVALID_PARAM;
+    }
+
+    // 临时添加过滤器以接收指定ID
+    uint8_t temp_filter;
+    if (!CANConfigFilter(hcan, rx_id, true, &temp_filter))
+    {
+        return OSAL_ERROR; // 过滤器添加失败
+    }
+
+    CAN_RxHeaderTypeDef rx_header;
+    uint8_t             rx_data[8];
+    uint32_t            fifo       = (rx_id & 1) ? CAN_RX_FIFO0 : CAN_RX_FIFO1;
+    float               start_time = DWT_GetTimeline_s();
+    float               timeout_s  = (timeout == OSAL_WAIT_FOREVER) ? 0 : (timeout / 1000.0f);
+    osal_status_t       result     = OSAL_TIMEOUT;
+
+    // 轮询接收，直到收到匹配的ID或超时
+    while (1)
+    {
+        if (HAL_CAN_GetRxFifoFillLevel(hcan, fifo) > 0)
+        {
+            if (HAL_CAN_GetRxMessage(hcan, fifo, &rx_header, rx_data) == HAL_OK)
+            {
+                if (rx_header.StdId == rx_id)
+                {
+                    // 找到匹配的消息
+                    memcpy(rx_buff, rx_data, rx_header.DLC);
+                    *rx_len = rx_header.DLC;
+                    result  = OSAL_SUCCESS;
+                    break;
+                }
+            }
+        }
+
+        // 检查超时
+        if (timeout != OSAL_WAIT_FOREVER)
+        {
+            float elapsed = DWT_GetTimeline_s() - start_time;
+            if (elapsed >= timeout_s)
+            {
+                result = OSAL_TIMEOUT;
+                break;
+            }
+        }
+
+        // 短暂延时避免CPU占用过高
+        DWT_Delay(0.0001f); // 100us延时
+    }
+
+    // 移除临时过滤器
+    CANConfigFilter(hcan, rx_id, false, &temp_filter);
+
+    return result;
 }
